@@ -1,16 +1,12 @@
-# bortube_frontend
+# BorTube Frontend
 
-A new Flutter project.
+The frontend of BorTube, making use of Flutter.
 
-## Getting Started
+## Docker
+First build the Docker image:  docker build . -t frontend_bortube   
+Then run the image: docker run -p 1200:80 --name frontend_bortube frontend_bortube
 
-This project is a starting point for a Flutter application.
+Open the browser and go to http://localhost:1200
 
-A few resources to get you started if this is your first Flutter project:
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
