@@ -1,0 +1,19 @@
+apiVersion : apps/v1
+kind: Deployment
+metadata:
+  name: bortubefrontend 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bortubefrontend
+  template:
+    metadata:
+      labels:
+        app: bortubefrontend 
+    spec:
+      containers:
+        - name: bortubefrontend 
+          image: borekregistry1.azurecr.io/bortubefrontend
+          ports:
+          - containerPort: 80
