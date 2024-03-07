@@ -53,8 +53,15 @@ class _HomePageState extends State<HomePage> {
                   await showDialog<void>(
                       context: context,
                       builder: (context) => AlertDialog(
-                            content: UploadVideo(
-                                closeDialog: () => Navigator.of(context).pop()),
+                            content: UploadVideo(closeDialog: () {
+                              Navigator.of(context).pop();
+                              Future.delayed(const Duration(milliseconds: 500),
+                                  () {
+                                setState(() {
+                                  futureVideos = getAllVideos();
+                                });
+                              });
+                            }),
                           ));
                 },
                 child: const Text("Upload new video"))
