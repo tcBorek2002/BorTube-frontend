@@ -1,3 +1,4 @@
+import 'package:bortube_frontend/services/video_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -29,6 +30,7 @@ class _UploadVideoState extends State<UploadVideo> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Uploading video...')),
       );
+      createVideo(titleController.text, int.parse(durationController.text));
       widget.closeDialog();
     }
   }
