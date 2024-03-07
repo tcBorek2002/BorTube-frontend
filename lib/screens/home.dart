@@ -30,7 +30,10 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: const Text("BorTube"),
+        title: const Image(
+          image: AssetImage('assets/logo.png'),
+          height: 45,
+        ),
       ),
       body: Center(
         child: Column(
