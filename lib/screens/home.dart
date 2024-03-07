@@ -36,19 +36,21 @@ class _HomePageState extends State<HomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             VideoList(videos: videos),
-            FutureBuilder<List<Video>>(future: futureVideos, builder: (context, snapshot) {
-              if(snapshot.hasData) {
-                return VideoList(videos: snapshot.data);
-              } else if (snapshot.hasError) {
-                return Text('${snapshot.error}');
-              }
-              
-              return const CircularProgressIndicator();
-            }),
+            FutureBuilder<List<Video>>(
+                future: futureVideos,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return VideoList(videos: snapshot.data);
+                  } else if (snapshot.hasError) {
+                    return Text('${snapshot.error}');
+                  }
+
+                  return const CircularProgressIndicator();
+                }),
             const Text(
               'Welcome to BorTube!',
             ),
-            MaterialButton(
+            ElevatedButton(
               onPressed: () => {print(getAllVideos())},
               child: const Text("Load videos"),
             )
