@@ -1,5 +1,6 @@
 import 'package:bortube_frontend/objects/video.dart';
 import 'package:bortube_frontend/services/video_service.dart';
+import 'package:bortube_frontend/widgets/videos/upload_video.dart';
 import 'package:bortube_frontend/widgets/videos/video_list.dart';
 import 'package:flutter/material.dart';
 
@@ -35,7 +36,7 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            VideoList(videos: videos),
+            // VideoList(videos: videos),
             FutureBuilder<List<Video>>(
                 future: futureVideos,
                 builder: (context, snapshot) {
@@ -47,13 +48,16 @@ class _HomePageState extends State<HomePage> {
 
                   return const CircularProgressIndicator();
                 }),
-            const Text(
-              'Welcome to BorTube!',
-            ),
             ElevatedButton(
-              onPressed: () => {print(getAllVideos())},
-              child: const Text("Load videos"),
-            )
+                onPressed: () async {
+                  await showDialog<void>(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                            content: UploadVideo(
+                                closeDialog: () => Navigator.of(context).pop()),
+                          ));
+                },
+                child: const Text("Upload new video"))
           ],
         ),
       ),
