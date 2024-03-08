@@ -44,7 +44,15 @@ class _HomePageState extends State<HomePage> {
                 future: futureVideos,
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
-                    return VideoList(videos: snapshot.data);
+                    return VideoList(
+                        videos: snapshot.data,
+                        refreshVideos: () {
+                          Future.delayed(const Duration(milliseconds: 500), () {
+                            setState(() {
+                              futureVideos = getAllVideos();
+                            });
+                          });
+                        });
                   } else if (snapshot.hasError) {
                     return Text('${snapshot.error}');
                   }

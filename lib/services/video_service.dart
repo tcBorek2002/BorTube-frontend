@@ -34,3 +34,14 @@ Future<bool> createVideo(String title, int duration) async {
     throw Exception('Failed to create album.');
   }
 }
+
+Future<bool> deleteVideo(int id) async {
+  final response = await http.delete(
+    Uri.parse('http://localhost:8000/videos/$id'),
+  );
+  if (response.statusCode == 200) {
+    return true;
+  } else {
+    return false;
+  }
+}

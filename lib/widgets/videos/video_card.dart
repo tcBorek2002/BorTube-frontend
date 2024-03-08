@@ -1,4 +1,5 @@
 import 'package:bortube_frontend/objects/video.dart';
+import 'package:bortube_frontend/services/video_service.dart';
 import 'package:flutter/material.dart';
 
 String formatDuration(int seconds) {
@@ -9,9 +10,11 @@ String formatDuration(int seconds) {
 }
 
 class VideoCard extends StatelessWidget {
-  const VideoCard({super.key, required this.video});
+  const VideoCard(
+      {super.key, required this.video, required this.refreshVideos});
 
   final Video video;
+  final Function() refreshVideos;
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +44,14 @@ class VideoCard extends StatelessWidget {
                       const Spacer(),
                       Text(formatDuration(video.duration)),
                       IconButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text('Deleting video...')),
+                            );
+                            deleteVideo(video.id);
+                            refreshVideos();
+                          },
                           icon: const Icon(
                             Icons.delete_rounded,
                             color: Colors.red,

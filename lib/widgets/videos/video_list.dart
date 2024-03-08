@@ -3,13 +3,15 @@ import 'package:bortube_frontend/widgets/videos/video_card.dart';
 import 'package:flutter/material.dart';
 
 class VideoList extends StatelessWidget {
-  const VideoList({super.key, required this.videos});
+  const VideoList(
+      {super.key, required this.videos, required this.refreshVideos});
 
   final List<Video>? videos;
+  final Function() refreshVideos;
 
   @override
   Widget build(BuildContext context) {
-    if(videos == null) {
+    if (videos == null) {
       return const SizedBox.shrink();
     }
     return SizedBox(
@@ -20,7 +22,7 @@ class VideoList extends StatelessWidget {
         physics: const NeverScrollableScrollPhysics(),
         itemCount: videos!.length,
         itemBuilder: (BuildContext context, int index) {
-          return VideoCard(video: videos![index]);
+          return VideoCard(video: videos![index], refreshVideos: refreshVideos);
         },
       ),
     );
