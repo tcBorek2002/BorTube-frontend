@@ -21,11 +21,12 @@ class VideoCard extends StatelessWidget {
         child: Card(
           child: Column(
             children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(8.0),
-                child: const Image(
-                  image: AssetImage('assets/thumbnail.png'),
-                  height: 170,
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8.0),
+                  child: const Image(
+                      image: AssetImage('assets/thumbnail.png'), height: 144),
                 ),
               ),
               Padding(
@@ -38,7 +39,13 @@ class VideoCard extends StatelessWidget {
                         style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
                       const Spacer(),
-                      Text(formatDuration(video.duration))
+                      Text(formatDuration(video.duration)),
+                      IconButton(
+                          onPressed: () {},
+                          icon: const Icon(
+                            Icons.delete_rounded,
+                            color: Colors.red,
+                          ))
                     ],
                   ),
                 ),
