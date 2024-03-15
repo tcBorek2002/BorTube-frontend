@@ -17,6 +17,23 @@ Future<List<Video>> getAllVideos() async {
   }
 }
 
+Future<Video> getVideo(int videoID) async {
+  final response =
+      await http.get(Uri.parse('http://localhost:8000/videos/$videoID'));
+
+  if (response.statusCode == 200) {
+    // If the server did return a 200 OK response,
+    // then parse the JSON.
+    return Video.fromJson(jsonDecode(response.body));
+  } else if (response.statusCode == 401) {
+    throw Exception('401 - Video not found');
+  } else {
+    // If the server did not return a 200 OK response,
+    // then throw an exception.
+    throw Exception('Failed to load video');
+  }
+}
+
 Future<bool> createVideo(String title, int duration) async {
   final response = await http.post(
     Uri.parse('http://localhost:8000/videos'),
