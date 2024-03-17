@@ -5,8 +5,10 @@ import 'package:bortube_frontend/screens/home.dart';
 import 'package:bortube_frontend/screens/video.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_web_plugins/url_strategy.dart';
 
 void main() {
+  usePathUrlStrategy();
   runApp(MyApp());
 }
 
