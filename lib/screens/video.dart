@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import '../objects/video.dart';
 
 class VideoPage extends StatefulWidget {
-  VideoPage({super.key, required this.videoID});
-  final int videoID;
+  const VideoPage({super.key, required this.videoID});
+  final String? videoID;
 
   @override
   State<VideoPage> createState() => _VideoPageState();
@@ -13,19 +13,27 @@ class VideoPage extends StatefulWidget {
 
 class _VideoPageState extends State<VideoPage> {
   late Future<Video> video;
+  late bool found;
 
   @override
   void initState() {
     super.initState();
     try {
-      video = getVideo(widget.videoID);
+      if (widget.videoID != null) {
+        int idParsed = int.parse(widget.videoID!);
+        video = getVideo(idParsed);
+        found = true;
+      } else {
+        found = false;
+      }
     } catch (e) {
       print(e.toString());
+      found = false;
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return found ? const Placeholder() : const Text("404: Video not found");
   }
 }

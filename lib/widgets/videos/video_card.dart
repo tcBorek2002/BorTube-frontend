@@ -1,6 +1,8 @@
 import 'package:bortube_frontend/objects/video.dart';
 import 'package:bortube_frontend/services/video_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:go_router/go_router.dart';
 
 String formatDuration(int seconds) {
   Duration duration = Duration(seconds: seconds);
@@ -24,12 +26,15 @@ class VideoCard extends StatelessWidget {
         child: Card(
           child: Column(
             children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 8.0),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(8.0),
-                  child: const Image(
-                      image: AssetImage('assets/thumbnail.png'), height: 144),
+              GestureDetector(
+                onTap: () => context.go('/video/${video.id}'),
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8.0),
+                    child: const Image(
+                        image: AssetImage('assets/thumbnail.png'), height: 144),
+                  ),
                 ),
               ),
               Padding(
