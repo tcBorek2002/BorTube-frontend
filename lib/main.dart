@@ -15,26 +15,47 @@ void main() {
 class MyApp extends StatelessWidget {
   MyApp({super.key});
 
-  // GoRouter configuration
-  final _router = GoRouter(
-    initialLocation: '/',
-    routes: [
-      GoRoute(
-        path: '/',
-        builder: (context, state) => const HomePage(),
-      ),
-      GoRoute(
-          path: '/video/:id',
-          builder: (context, state) =>
-              VideoPage(videoID: state.pathParameters['id'])),
-      GoRoute(path: '/test', builder: (context, state) => const ErrorScreen())
-    ],
-    errorBuilder: (context, state) => const ErrorScreen(),
-  );
+  final _rootNavigatorKey = GlobalKey<NavigatorState>();
+  final _shellNavigatorKey = GlobalKey<NavigatorState>();
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    final _router = GoRouter(
+      initialLocation: '/',
+      navigatorKey: _rootNavigatorKey,
+      routes: [
+        ShellRoute(
+            navigatorKey: _shellNavigatorKey,
+            builder: (context, state, child) {
+              return Scaffold(
+                appBar: AppBar(
+                  backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+                  title: const Image(
+                    image: AssetImage('assets/logo.png'),
+                    height: 45,
+                  ),
+                ),
+                body: child,
+              );
+            },
+            routes: [
+              GoRoute(
+                path: '/',
+                builder: (context, state) => const HomePage(),
+              ),
+              GoRoute(
+                  path: '/video/:id',
+                  builder: (context, state) =>
+                      VideoPage(videoID: state.pathParameters['id'])),
+              GoRoute(
+                  path: '/test',
+                  builder: (context, state) => const ErrorScreen())
+            ])
+      ],
+      errorBuilder: (context, state) => const ErrorScreen(),
+    );
+
     return MaterialApp.router(
       title: 'BorTube',
       routerConfig: _router,
