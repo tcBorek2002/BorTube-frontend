@@ -45,65 +45,56 @@ class _HomePageState extends State<HomePage> {
       Video(2, "Haa", 222)
     ];
 
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: const Image(
-          image: AssetImage('assets/logo.png'),
-          height: 45,
-        ),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            SizedBox(
-              width: 300,
-              child: AspectRatio(
-                aspectRatio: _videoPlayerController.value.aspectRatio,
-                child: Chewie(
-                  controller: _chewieController,
-                ),
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          SizedBox(
+            width: 300,
+            child: AspectRatio(
+              aspectRatio: _videoPlayerController.value.aspectRatio,
+              child: Chewie(
+                controller: _chewieController,
               ),
             ),
-            FutureBuilder<List<Video>>(
-                future: futureVideos,
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return VideoList(
-                        videos: snapshot.data,
-                        refreshVideos: () {
-                          Future.delayed(const Duration(milliseconds: 500), () {
-                            setState(() {
-                              futureVideos = getAllVideos();
-                            });
+          ),
+          FutureBuilder<List<Video>>(
+              future: futureVideos,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return VideoList(
+                      videos: snapshot.data,
+                      refreshVideos: () {
+                        Future.delayed(const Duration(milliseconds: 500), () {
+                          setState(() {
+                            futureVideos = getAllVideos();
                           });
                         });
-                  } else if (snapshot.hasError) {
-                    return Text('${snapshot.error}');
-                  }
+                      });
+                } else if (snapshot.hasError) {
+                  return Text('${snapshot.error}');
+                }
 
-                  return const CircularProgressIndicator();
-                }),
-            ElevatedButton(
-                onPressed: () async {
-                  await showDialog<void>(
-                      context: context,
-                      builder: (context) => AlertDialog(
-                            content: UploadVideo(closeDialog: () {
-                              Navigator.of(context).pop();
-                              Future.delayed(const Duration(milliseconds: 500),
-                                  () {
-                                setState(() {
-                                  futureVideos = getAllVideos();
-                                });
+                return const CircularProgressIndicator();
+              }),
+          ElevatedButton(
+              onPressed: () async {
+                await showDialog<void>(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                          content: UploadVideo(closeDialog: () {
+                            Navigator.of(context).pop();
+                            Future.delayed(const Duration(milliseconds: 500),
+                                () {
+                              setState(() {
+                                futureVideos = getAllVideos();
                               });
-                            }),
-                          ));
-                },
-                child: const Text("Upload new video"))
-          ],
-        ),
+                            });
+                          }),
+                        ));
+              },
+              child: const Text("Upload new video"))
+        ],
       ),
     );
   }
