@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class ErrorScreen extends StatelessWidget {
   const ErrorScreen({super.key});
@@ -11,8 +12,8 @@ class ErrorScreen extends StatelessWidget {
         title: const Text("404: Page not found"),
       ),
       body: Center(
-        child: MaterialButton(
-          onPressed: () => {},
+        child: ElevatedButton(
+          onPressed: () => {context.go("/")},
           child: const Text("Go to home page"),
         ),
       ),
