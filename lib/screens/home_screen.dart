@@ -49,15 +49,15 @@ class _HomePageState extends State<HomePage> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          SizedBox(
-            width: 300,
-            child: AspectRatio(
-              aspectRatio: _videoPlayerController.value.aspectRatio,
-              child: Chewie(
-                controller: _chewieController,
-              ),
-            ),
-          ),
+          // SizedBox(
+          //   width: 300,
+          //   child: AspectRatio(
+          //     aspectRatio: _videoPlayerController.value.aspectRatio,
+          //     child: Chewie(
+          //       controller: _chewieController,
+          //     ),
+          //   ),
+          // ),
           FutureBuilder<List<Video>>(
               future: futureVideos,
               builder: (context, snapshot) {

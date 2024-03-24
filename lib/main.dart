@@ -1,8 +1,8 @@
 import 'dart:js';
 
 import 'package:bortube_frontend/screens/error_screen.dart';
-import 'package:bortube_frontend/screens/home.dart';
-import 'package:bortube_frontend/screens/video.dart';
+import 'package:bortube_frontend/screens/home_screen.dart';
+import 'package:bortube_frontend/screens/video_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
@@ -68,7 +68,7 @@ class MyApp extends StatelessWidget {
             .copyWith(brightness: Brightness.dark),
         useMaterial3: true,
       ),
-      themeMode: ThemeMode.system,
+      themeMode: ThemeMode.dark,
     );
   }
 }

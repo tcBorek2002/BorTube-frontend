@@ -25,8 +25,8 @@ Future<Video> getVideo(int videoID) async {
     // If the server did return a 200 OK response,
     // then parse the JSON.
     return Video.fromJson(jsonDecode(response.body));
-  } else if (response.statusCode == 401) {
-    throw Exception('401 - Video not found');
+  } else if (response.statusCode == 404) {
+    throw Exception('404 - Video not found');
   } else {
     // If the server did not return a 200 OK response,
     // then throw an exception.
