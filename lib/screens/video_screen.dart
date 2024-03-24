@@ -12,44 +12,38 @@ class VideoPage extends StatefulWidget {
 }
 
 class _VideoPageState extends State<VideoPage> {
-  late Future<Video> video;
-  late bool found = false;
-  String hello = "Loading";
+  late Future<Video?> video;
 
   @override
   void initState() {
     super.initState();
     try {
       if (widget.videoID != null) {
-        int idParsed = int.parse(widget.videoID!);
-        setState(() {
-          video = getVideo(idParsed);
-          video.then((value) => print(value.title));
-
-          // found = true;
-          // hello = "Found";
-        });
+        int? idParsed = int.tryParse(widget.videoID!);
+        if (idParsed != null) {
+          setState(() {
+            video = getVideo(idParsed);
+          });
+        } else {
+          video = Future.value(null);
+        }
       } else {
-        setState(() {
-          found = false;
-          hello = "Error";
-        });
+        video = Future.value(null);
       }
     } catch (e) {
       print(e.toString());
-      setState(() {
-        found = false;
-        hello = "Error";
-      });
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<Video>(
+    return FutureBuilder<Video?>(
       future: video,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
+          if (snapshot.data == null) {
+            return const Text("404 - Video not found");
+          }
           return Text(snapshot.data!.title);
         } else if (snapshot.hasError) {
           return Text('${snapshot.error}');
