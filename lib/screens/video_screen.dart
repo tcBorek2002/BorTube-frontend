@@ -25,6 +25,7 @@ class _VideoPageState extends State<VideoPage> {
         setState(() {
           video = getVideo(idParsed);
           video.then((value) => print(value.title));
+
           // found = true;
           // hello = "Found";
         });
@@ -45,6 +46,17 @@ class _VideoPageState extends State<VideoPage> {
 
   @override
   Widget build(BuildContext context) {
-    return found ? Text(hello) : const Text("404: Video not found");
+    return FutureBuilder<Video>(
+      future: video,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return Text(snapshot.data!.title);
+        } else if (snapshot.hasError) {
+          return Text('${snapshot.error}');
+        }
+
+        return const CircularProgressIndicator();
+      },
+    );
   }
 }
