@@ -15,27 +15,11 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late Future<List<Video>> futureVideos;
-  late VideoPlayerController _videoPlayerController;
-  late ChewieController _chewieController;
 
   @override
   void initState() {
     super.initState();
     futureVideos = getAllVideos();
-    _videoPlayerController = VideoPlayerController.networkUrl(Uri.parse(
-        'https://bortube-dxh7dweqezf2hmet.z01.azurefd.net/bortubevideoscontainer/bee.mp4')); // Replace with your video URL
-    _chewieController = ChewieController(
-      videoPlayerController: _videoPlayerController,
-      autoPlay: true,
-      looping: true,
-    );
-  }
-
-  @override
-  void dispose() {
-    _videoPlayerController.dispose();
-    _chewieController.dispose();
-    super.dispose();
   }
 
   @override
@@ -49,15 +33,6 @@ class _HomePageState extends State<HomePage> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          // SizedBox(
-          //   width: 300,
-          //   child: AspectRatio(
-          //     aspectRatio: _videoPlayerController.value.aspectRatio,
-          //     child: Chewie(
-          //       controller: _chewieController,
-          //     ),
-          //   ),
-          // ),
           FutureBuilder<List<Video>>(
               future: futureVideos,
               builder: (context, snapshot) {
