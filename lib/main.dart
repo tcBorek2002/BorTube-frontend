@@ -3,6 +3,7 @@ import 'dart:js';
 import 'package:bortube_frontend/screens/error_screen.dart';
 import 'package:bortube_frontend/screens/home_screen.dart';
 import 'package:bortube_frontend/screens/video_screen.dart';
+import 'package:bortube_frontend/widgets/navbar.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
@@ -28,15 +29,8 @@ class MyApp extends StatelessWidget {
         ShellRoute(
             navigatorKey: _shellNavigatorKey,
             builder: (context, state, child) {
-              return Scaffold(
-                appBar: AppBar(
-                  backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-                  title: const Image(
-                    image: AssetImage('assets/logo.png'),
-                    height: 45,
-                  ),
-                ),
-                body: child,
+              return NavBar(
+                child: child,
               );
             },
             routes: [
@@ -45,9 +39,10 @@ class MyApp extends StatelessWidget {
                 builder: (context, state) => const HomePage(),
               ),
               GoRoute(
-                  path: '/video/:id',
-                  builder: (context, state) =>
-                      VideoPage(videoID: state.pathParameters['id'])),
+                path: '/video/:id',
+                builder: (context, state) =>
+                    VideoPage(videoID: state.pathParameters['id']),
+              ),
               GoRoute(
                   path: '/test',
                   builder: (context, state) => const ErrorScreen())
