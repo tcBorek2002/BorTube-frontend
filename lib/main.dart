@@ -1,5 +1,3 @@
-import 'dart:js';
-
 import 'package:bortube_frontend/screens/error_screen.dart';
 import 'package:bortube_frontend/screens/home_screen.dart';
 import 'package:bortube_frontend/screens/video_screen.dart';
@@ -16,8 +14,8 @@ void main() {
 class MyApp extends StatelessWidget {
   MyApp({super.key});
 
-  final _rootNavigatorKey = GlobalKey<NavigatorState>();
-  final _shellNavigatorKey = GlobalKey<NavigatorState>();
+  final _rootNavigatorKey = GlobalKey<NavigatorState>(debugLabel: "root bor");
+  final _shellNavigatorKey = GlobalKey<NavigatorState>(debugLabel: "shell bor");
 
   // This widget is the root of your application.
   @override
@@ -27,11 +25,11 @@ class MyApp extends StatelessWidget {
       navigatorKey: _rootNavigatorKey,
       routes: [
         ShellRoute(
-            navigatorKey: _shellNavigatorKey,
             builder: (context, state, child) {
               return NavBar(
                 child: child,
               );
+              // return child;
             },
             routes: [
               GoRoute(
