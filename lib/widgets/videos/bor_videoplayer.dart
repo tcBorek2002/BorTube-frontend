@@ -20,14 +20,14 @@ class _BorVideoPlayerState extends State<BorVideoPlayer> {
   Future<void> initBorVideoPlayer() async {
     await _videoPlayerController.initialize();
     setState(() {
-      print(_videoPlayerController.value.aspectRatio);
       _chewieController = ChewieController(
-        videoPlayerController: _videoPlayerController,
-        aspectRatio: _videoPlayerController.value.aspectRatio,
-        autoPlay: false,
-        looping: false,
-      );
+          videoPlayerController: _videoPlayerController,
+          aspectRatio: _videoPlayerController.value.aspectRatio,
+          autoPlay: false,
+          looping: false,
+          autoInitialize: false);
     });
+    _chewieController.pause();
   }
 
   @override
@@ -66,6 +66,7 @@ class _BorVideoPlayerState extends State<BorVideoPlayer> {
   void dispose() {
     _videoPlayerController.dispose();
     _chewieController.dispose();
+    _chewieController.pause();
     super.dispose();
   }
 }

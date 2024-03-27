@@ -1,8 +1,6 @@
 import 'package:bortube_frontend/services/video_service.dart';
 import 'package:bortube_frontend/widgets/videos/bor_videoplayer.dart';
-import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
-import 'package:video_player/video_player.dart';
 
 import '../objects/video.dart';
 
@@ -16,9 +14,6 @@ class VideoPage extends StatefulWidget {
 
 class _VideoPageState extends State<VideoPage> {
   late Future<Video?> video;
-
-  late VideoPlayerController _videoPlayerController;
-  late ChewieController _chewieController;
 
   @override
   void initState() {
@@ -39,23 +34,10 @@ class _VideoPageState extends State<VideoPage> {
     } catch (e) {
       print(e.toString());
     }
-
-    _videoPlayerController = VideoPlayerController.networkUrl(Uri.parse(
-        'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4')); // Replace with your video URL
-    // https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4
-    // https://bortube-dxh7dweqezf2hmet.z01.azurefd.net/bortubevideoscontainer/bee.mp4
-    _chewieController = ChewieController(
-      videoPlayerController: _videoPlayerController,
-      autoPlay: true,
-      looping: true,
-    );
-    print(_videoPlayerController.value.aspectRatio);
   }
 
   @override
   void dispose() {
-    _videoPlayerController.dispose();
-    _chewieController.dispose();
     super.dispose();
   }
 
