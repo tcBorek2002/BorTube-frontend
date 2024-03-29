@@ -3,8 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:html' as html;
 
-class VideoUploadWidget extends StatelessWidget {
+class VideoUploadWidget extends StatefulWidget {
   const VideoUploadWidget({super.key});
+
+  @override
+  State<VideoUploadWidget> createState() => _VideoUploadWidgetState();
+}
+
+class _VideoUploadWidgetState extends State<VideoUploadWidget> {
+  bool _isUploading = false;
 
   Future<void> uploadVideo(BuildContext context) async {
     html.FileUploadInputElement uploadInput = html.FileUploadInputElement();
@@ -22,7 +29,14 @@ class VideoUploadWidget extends StatelessWidget {
 
         reader.onLoadEnd.listen((event) async {
           final bytes = reader.result as List<int>;
+          setState(() {
+            _isUploading = true;
+          });
+
           final success = await uploadVideoBackend(bytes, file.name);
+          setState(() {
+            _isUploading = false;
+          });
           if (success) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
@@ -45,9 +59,12 @@ class VideoUploadWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-        child: ElevatedButton(
-      onPressed: () => uploadVideo(context),
-      child: const Text('Select and Upload Video'),
-    ));
+      child: _isUploading
+          ? const CircularProgressIndicator()
+          : ElevatedButton(
+              onPressed: () => uploadVideo(context),
+              child: const Text('Select and Upload Video'),
+            ),
+    );
   }
 }
