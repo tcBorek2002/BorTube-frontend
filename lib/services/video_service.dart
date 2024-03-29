@@ -73,10 +73,8 @@ Future<bool> uploadVideoBackend(List<int> bytes, String filename) async {
 
   final response = await request.send();
   if (response.statusCode == 200) {
-    print('Video uploaded successfully');
     return true;
   } else {
-    print('Error uploading video');
     return false;
   }
 }
