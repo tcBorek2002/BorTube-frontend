@@ -3,8 +3,10 @@ import 'dart:convert';
 import 'package:bortube_frontend/objects/video.dart';
 import 'package:http/http.dart' as http;
 
+const videosURL = "http://localhost:8000/videos";
+
 Future<List<Video>> getAllVideos() async {
-  final response = await http.get(Uri.parse('http://localhost:8000/videos'));
+  final response = await http.get(Uri.parse(videosURL));
 
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
@@ -18,8 +20,7 @@ Future<List<Video>> getAllVideos() async {
 }
 
 Future<Video> getVideo(int videoID) async {
-  final response =
-      await http.get(Uri.parse('http://localhost:8000/videos/$videoID'));
+  final response = await http.get(Uri.parse('$videosURL/$videoID'));
 
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
@@ -36,7 +37,7 @@ Future<Video> getVideo(int videoID) async {
 
 Future<bool> createVideo(String title, int duration) async {
   final response = await http.post(
-    Uri.parse('http://localhost:8000/videos'),
+    Uri.parse(videosURL),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
@@ -54,11 +55,28 @@ Future<bool> createVideo(String title, int duration) async {
 
 Future<bool> deleteVideo(int id) async {
   final response = await http.delete(
-    Uri.parse('http://localhost:8000/videos/$id'),
+    Uri.parse('$videosURL/$id'),
   );
   if (response.statusCode == 200) {
     return true;
   } else {
+    return false;
+  }
+}
+
+Future<bool> uploadVideoBackend(List<int> bytes, String filename) async {
+  final videoFile =
+      http.MultipartFile.fromBytes('video', bytes, filename: filename);
+
+  final request = http.MultipartRequest('POST', Uri.parse('$videosURL/upload'));
+  request.files.add(videoFile);
+
+  final response = await request.send();
+  if (response.statusCode == 200) {
+    print('Video uploaded successfully');
+    return true;
+  } else {
+    print('Error uploading video');
     return false;
   }
 }

@@ -2,6 +2,7 @@ import 'package:bortube_frontend/objects/video.dart';
 import 'package:bortube_frontend/services/video_service.dart';
 import 'package:bortube_frontend/widgets/videos/upload_video.dart';
 import 'package:bortube_frontend/widgets/videos/video_list.dart';
+import 'package:bortube_frontend/widgets/videos/video_upload_widget.dart';
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
@@ -68,7 +69,11 @@ class _HomePageState extends State<HomePage> {
                           }),
                         ));
               },
-              child: const Text("Upload new video"))
+              child: const Text("Create new video")),
+          const Padding(
+            padding: EdgeInsets.only(top: 8.0),
+            child: VideoUploadWidget(),
+          ),
         ],
       ),
     );

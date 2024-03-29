@@ -1,4 +1,5 @@
 import 'package:bortube_frontend/services/video_service.dart';
+import 'package:bortube_frontend/widgets/videos/video_upload_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -88,6 +89,7 @@ class _UploadVideoState extends State<UploadVideo> {
                     ),
                   ),
                 ),
+                const VideoUploadWidget(),
                 Padding(
                   padding: const EdgeInsets.all(8),
                   child: ElevatedButton(
