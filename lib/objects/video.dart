@@ -1,17 +1,22 @@
 class Video {
   int id;
   String title;
+  String description;
+  String videoUrl;
   int duration;
 
-  Video(this.id, this.title, this.duration);
+  Video(this.id, this.title, this.description, this.videoUrl, this.duration);
 
   factory Video.fromJson(dynamic json) {
     if (json is Map<String, dynamic>) {
       // Handle a single video object
+      final videoFile = json['videoFile'] as Map<String, dynamic>;
       return Video(
         json['id'] as int,
         json['title'] as String,
-        json['duration'] as int,
+        json['description'] as String,
+        videoFile['videoUrl'] as String,
+        videoFile['duration'] as int,
       );
     } else if (json is List<dynamic>) {
       // Handle an array of video objects
@@ -25,17 +30,20 @@ class Video {
   static List<Video> fromJsonList(List<dynamic> jsonList) {
     try {
       // Process the list of video objects
-      final List<Video> videos = jsonList
-          .map((json) => Video(
-                json['id'] as int,
-                json['title'] as String,
-                json['duration'] as int,
-              ))
-          .toList();
+      final List<Video> videos = jsonList.map((json) {
+        final videoFile = json['videoFile'] as Map<String, dynamic>;
+        return Video(
+          json['id'] as int,
+          json['title'] as String,
+          json['description'] as String,
+          videoFile['videoUrl'] as String,
+          videoFile['duration'] as int,
+        );
+      }).toList();
 
       return videos;
     } catch (error) {
-      throw FormatException('Failed to parse video. $error'); 
+      throw FormatException('Failed to parse video. $error');
     }
   }
 }

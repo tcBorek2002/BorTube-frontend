@@ -64,17 +64,31 @@ Future<bool> deleteVideo(int id) async {
   }
 }
 
-Future<bool> uploadVideoBackend(List<int> bytes, String filename) async {
+Future<int> uploadVideoBackend(
+    String title, String description, List<int> bytes, String filename) async {
   final videoFile =
       http.MultipartFile.fromBytes('video', bytes, filename: filename);
 
-  final request = http.MultipartRequest('POST', Uri.parse('$videosURL/upload'));
+  final request = http.MultipartRequest('POST', Uri.parse(videosURL));
   request.files.add(videoFile);
 
-  final response = await request.send();
-  if (response.statusCode == 200) {
-    return true;
+  final jsonBody = json.encode({'title': title, 'description': description});
+  request.fields['data'] = jsonBody;
+  request.headers['Content-Type'] = 'multipart/form-data';
+  request.fields['title'] = title;
+  request.fields['description'] = description;
+
+  final streamedResponse = await request.send();
+  final response = await http.Response.fromStream(streamedResponse);
+  if (response.statusCode == 201) {
+    final responseBody = jsonDecode(response.body);
+    if (responseBody.containsKey('videoId') && responseBody['videoId'] is int) {
+      return responseBody['videoId'];
+    } else {
+      return -1;
+    }
   } else {
-    return false;
+    print(response.body.toString());
+    return -1;
   }
 }

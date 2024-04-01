@@ -25,10 +25,10 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final List<Video> videos = [
-      Video(1, "Hello world", 180),
-      Video(2, "Haa", 222)
-    ];
+    // final List<Video> videos = [
+    //   Video(1, "Hello world", 180),
+    //   Video(2, "Haa", 222)
+    // ];
 
     return Center(
       child: Column(

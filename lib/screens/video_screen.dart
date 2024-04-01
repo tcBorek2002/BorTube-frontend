@@ -63,9 +63,8 @@ class _VideoPageState extends State<VideoPage> {
                     style: const TextStyle(
                         fontSize: 20, fontWeight: FontWeight.bold),
                   ),
-                  const BorVideoPlayer(
-                    videoURL:
-                        'https://storagebortube.blob.core.windows.net/bortube-container/1000082681.mp4',
+                  BorVideoPlayer(
+                    videoURL: snapshot.data!.videoUrl,
                   )
                 ],
               ),
