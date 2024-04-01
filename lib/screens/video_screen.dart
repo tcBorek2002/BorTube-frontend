@@ -65,7 +65,7 @@ class _VideoPageState extends State<VideoPage> {
                   ),
                   const BorVideoPlayer(
                     videoURL:
-                        'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4',
+                        'https://storagebortube.blob.core.windows.net/bortube-container/1000082681.mp4',
                   )
                 ],
               ),
