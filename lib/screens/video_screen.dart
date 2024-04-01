@@ -65,6 +65,11 @@ class _VideoPageState extends State<VideoPage> {
                   ),
                   BorVideoPlayer(
                     videoURL: snapshot.data!.videoUrl,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: Expanded(
+                        child: Card(child: Text(snapshot.data!.description))),
                   )
                 ],
               ),
