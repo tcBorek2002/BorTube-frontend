@@ -69,13 +69,7 @@ class _HomePageState extends State<HomePage> {
                           }),
                         ));
               },
-              child: const Text("Create new video")),
-          Padding(
-            padding: const EdgeInsets.only(top: 8.0),
-            child: VideoUploadWidget(
-              onUpload: () {},
-            ),
-          ),
+              child: const Text("Upload new video")),
         ],
       ),
     );
