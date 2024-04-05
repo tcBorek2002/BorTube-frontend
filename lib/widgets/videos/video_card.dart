@@ -26,7 +26,7 @@ class VideoCard extends StatelessWidget {
         child: Card(
           child: Column(
             children: [
-              GestureDetector(
+              InkWell(
                 onTap: () => context.go('/video/${video.id}'),
                 child: Padding(
                   padding: const EdgeInsets.only(top: 8.0),
