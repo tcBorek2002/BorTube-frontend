@@ -23,7 +23,7 @@ class _BorVideoPlayerState extends State<BorVideoPlayer> {
       _chewieController = ChewieController(
           videoPlayerController: _videoPlayerController,
           aspectRatio: _videoPlayerController.value.aspectRatio,
-          autoPlay: false,
+          autoPlay: true,
           looping: false,
           autoInitialize: false);
     });
