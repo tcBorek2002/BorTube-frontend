@@ -85,11 +85,15 @@ class _UploadOverviewState extends State<UploadOverview> {
             Expanded(
                 child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                  widget.description,
-                  overflow: TextOverflow.ellipsis,
-                  textAlign: TextAlign.justify,
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    widget.description,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.justify,
+                  ),
                 ),
               ],
             )),
