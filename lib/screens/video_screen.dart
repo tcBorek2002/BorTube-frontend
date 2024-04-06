@@ -63,13 +63,51 @@ class _VideoPageState extends State<VideoPage> {
                     style: const TextStyle(
                         fontSize: 20, fontWeight: FontWeight.bold),
                   ),
-                  BorVideoPlayer(
-                    videoURL: snapshot.data!.videoUrl,
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: BorVideoPlayer(
+                      videoURL: snapshot.data!.videoUrl,
+                    ),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 8.0),
-                    child: Expanded(
-                        child: Card(child: Text(snapshot.data!.description))),
+                    child: SizedBox(
+                        width: MediaQuery.sizeOf(context).width * 0.5,
+                        child: Card(
+                            color:
+                                Theme.of(context).cardColor.withOpacity(0.95),
+                            elevation: 2,
+                            child: Padding(
+                              padding: const EdgeInsets.only(top: 8.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Row(
+                                    children: [
+                                      Padding(
+                                        padding:
+                                            EdgeInsets.symmetric(horizontal: 8),
+                                        child: CircleAvatar(
+                                          child: Icon(Icons.person_rounded),
+                                        ),
+                                      ),
+                                      Text(
+                                        "Username",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      )
+                                    ],
+                                  ),
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(8, 8, 0, 8),
+                                    child: Text(
+                                      snapshot.data!.description,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ))),
                   )
                 ],
               ),
