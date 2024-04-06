@@ -19,7 +19,6 @@ class VideoList extends StatelessWidget {
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
         itemCount: videos!.length,
         itemBuilder: (BuildContext context, int index) {
           return VideoCard(video: videos![index], refreshVideos: refreshVideos);
