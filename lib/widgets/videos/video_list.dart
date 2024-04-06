@@ -16,13 +16,18 @@ class VideoList extends StatelessWidget {
     }
     return SizedBox(
       height: 200,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        shrinkWrap: true,
-        itemCount: videos!.length,
-        itemBuilder: (BuildContext context, int index) {
-          return VideoCard(video: videos![index], refreshVideos: refreshVideos);
-        },
+      child: Scrollbar(
+        trackVisibility: true,
+        thumbVisibility: true,
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          shrinkWrap: true,
+          itemCount: videos!.length,
+          itemBuilder: (BuildContext context, int index) {
+            return VideoCard(
+                video: videos![index], refreshVideos: refreshVideos);
+          },
+        ),
       ),
     );
   }
