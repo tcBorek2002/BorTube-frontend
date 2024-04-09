@@ -23,6 +23,24 @@ variables:
 
 
 stages:
+- stage: Verify
+  displayName: Verify code
+  jobs:
+    - job: SonarQube
+      displayName: SonarQube
+      steps:
+        - task: SonarQubePrepare@5
+          inputs:
+            SonarQube: 'SonarQube-Eindhoven'
+            scannerMode: 'CLI'
+            configMode: 'file' 
+        - task: SonarQubeAnalyze@5
+          inputs:
+            jdkversion: 'JAVA_HOME_11_X64'
+        - task: SonarQubePublish@5
+          inputs:
+            pollingTimeoutSec: '300'
+
 - stage: Build
   displayName: Build stage
   jobs:
