@@ -1,7 +1,11 @@
 import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
 
+import 'package:bortube_frontend/objects/createVideoDto.dart';
 import 'package:bortube_frontend/objects/video.dart';
 import 'package:http/http.dart' as http;
+import 'package:video_player/video_player.dart';
 
 const videosURL = "http://localhost:8000/videos";
 
@@ -35,7 +39,8 @@ Future<Video> getVideo(int videoID) async {
   }
 }
 
-Future<bool> createVideo(String title, int duration) async {
+Future<CreateVideoDto> createVideo(
+    String title, String description, int duration, String fileName) async {
   final response = await http.post(
     Uri.parse(videosURL),
     headers: <String, String>{
@@ -43,13 +48,32 @@ Future<bool> createVideo(String title, int duration) async {
     },
     body: jsonEncode(<String, dynamic>{
       'title': title,
+      'description': description,
+      'fileName': fileName,
       'duration': duration,
     }),
   );
   if (response.statusCode == 201) {
-    return true;
+    return CreateVideoDto.fromJson(jsonDecode(response.body));
   } else {
-    throw Exception('Failed to create album.');
+    throw Exception('Failed to create video.');
+  }
+}
+
+Future<bool> videoUploaded(int videoId, String fileName) async {
+  final response = await http.post(
+    Uri.parse('$videosURL/$videoId/uploaded'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode(<String, dynamic>{
+      'fileName': fileName,
+    }),
+  );
+  if (response.statusCode == 200) {
+    return jsonDecode(response.body)['uploaded'];
+  } else {
+    throw Exception('Failed to create video.');
   }
 }
 
@@ -94,15 +118,21 @@ Future<int> uploadVideoBackend(
 }
 
 Future<int> uploadAzure(
-    List<int> bytes, String filename, String azureSASUrl) async {
+    List<int> bytes, String filename, String azureSASUrl, int videoId) async {
   final videoFile =
       http.MultipartFile.fromBytes('video', bytes, filename: filename);
+
+  // VideoPlayerController controller =
+  //     VideoPlayerController.file(File.fromRawPath(Uint8List.fromList(bytes)));
+  // await controller.initialize();
+  // Duration videoDuration = controller.value.duration;
 
   final request = http.MultipartRequest('PUT', Uri.parse(azureSASUrl));
   request.files.add(videoFile);
 
   request.headers['Content-Type'] = 'multipart/form-data';
   request.headers['x-ms-blob-type'] = 'BlockBlob';
+  request.headers['x-ms-tags'] = 'videoId=$videoId';
 
   final streamedResponse = await request.send();
   final response = await http.Response.fromStream(streamedResponse);

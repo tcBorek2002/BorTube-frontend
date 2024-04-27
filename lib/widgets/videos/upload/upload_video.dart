@@ -1,6 +1,4 @@
-import 'package:bortube_frontend/services/video_service.dart';
 import 'package:bortube_frontend/widgets/videos/upload/upload_overview.dart';
-import 'package:bortube_frontend/widgets/videos/upload/upload_stepper_widget.dart';
 import 'package:bortube_frontend/widgets/videos/upload/video_upload_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -24,6 +22,7 @@ class _UploadVideoState extends State<UploadVideo>
   List<int> _videoBytes = [];
   late String _fileName = "";
   late String _fileSize = "";
+  late int _videoDuration = 0;
 
   @override
   void initState() {
@@ -64,12 +63,14 @@ class _UploadVideoState extends State<UploadVideo>
     }
   }
 
-  void onFileSelected(List<int> bytes, String fileName, String fileSize) {
+  void onFileSelected(
+      List<int> bytes, String fileName, String fileSize, int videoDuration) {
     setState(() {
       _videoSelected = true;
       _videoBytes = bytes;
       _fileName = fileName;
       _fileSize = fileSize;
+      _videoDuration = videoDuration;
     });
     _tabController.animateTo(2);
   }
@@ -191,6 +192,7 @@ class _UploadVideoState extends State<UploadVideo>
               UploadOverview(
                 title: titleController.text,
                 description: descriptionController.text,
+                videoDuration: _videoDuration,
                 bytes: _videoBytes,
                 fileName: _fileName,
                 fileSize: _fileSize,

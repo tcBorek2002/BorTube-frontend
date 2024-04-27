@@ -17,6 +17,7 @@ class _VideoUploadWidgetState extends State<VideoUploadWidget> {
   bool _isUploading = false;
 
   Future<void> uploadVideo(BuildContext context) async {
+    int videoDuration = 0;
     html.FileUploadInputElement uploadInput = html.FileUploadInputElement();
     uploadInput.accept = 'video/*';
     uploadInput.click();
@@ -24,9 +25,16 @@ class _VideoUploadWidgetState extends State<VideoUploadWidget> {
     uploadInput.onChange.listen((event) {
       final file = uploadInput.files?.first;
       if (file != null) {
-        // ScaffoldMessenger.of(context).showSnackBar(
-        //   const SnackBar(content: Text('Uploading video, please wait...')),
-        // );
+        String blobUrl = html.Url.createObjectUrl(file);
+        html.VideoElement video = html.VideoElement();
+        video.onCanPlay.first.then((_) {
+          print('Duration: ${video.duration}');
+          videoDuration = video.duration.toInt();
+          video.remove();
+          html.Url.revokeObjectUrl(blobUrl);
+        });
+        video.src = blobUrl;
+
         final reader = html.FileReader();
         reader.readAsArrayBuffer(file);
 
@@ -54,7 +62,7 @@ class _VideoUploadWidgetState extends State<VideoUploadWidget> {
           fileSize =
               '${(file.size / pow(1024, i)).toStringAsFixed(1)} ${suffixes[i]}';
 
-          widget.onUpload(bytes, file.name, fileSize);
+          widget.onUpload(bytes, file.name, fileSize, videoDuration);
           // final success = await uploadVideoBackend(bytes, file.name);
           // setState(() {
           //   _isUploading = false;
