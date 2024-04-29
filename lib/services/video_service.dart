@@ -41,17 +41,19 @@ Future<Video> getVideo(int videoID) async {
 
 Future<CreateVideoDto> createVideo(
     String title, String description, int duration, String fileName) async {
+  String body = jsonEncode(<String, dynamic>{
+    'title': title,
+    'description': description,
+    'fileName': fileName,
+    'duration': duration,
+  });
+  print(body);
   final response = await http.post(
     Uri.parse(videosURL),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
-    body: jsonEncode(<String, dynamic>{
-      'title': title,
-      'description': description,
-      'fileName': fileName,
-      'duration': duration,
-    }),
+    body: body,
   );
   if (response.statusCode == 201) {
     return CreateVideoDto.fromJson(jsonDecode(response.body));

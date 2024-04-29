@@ -24,15 +24,11 @@ class _VideoUploadWidgetState extends State<VideoUploadWidget> {
 
     uploadInput.onChange.listen((event) {
       final file = uploadInput.files?.first;
+
       if (file != null) {
-        String blobUrl = html.Url.createObjectUrl(file);
         html.VideoElement video = html.VideoElement();
-        video.onCanPlay.first.then((_) {
-          print('Duration: ${video.duration}');
-          videoDuration = video.duration.toInt();
-          video.remove();
-          html.Url.revokeObjectUrl(blobUrl);
-        });
+        String blobUrl = html.Url.createObjectUrl(file);
+
         video.src = blobUrl;
 
         final reader = html.FileReader();
@@ -62,7 +58,16 @@ class _VideoUploadWidgetState extends State<VideoUploadWidget> {
           fileSize =
               '${(file.size / pow(1024, i)).toStringAsFixed(1)} ${suffixes[i]}';
 
-          widget.onUpload(bytes, file.name, fileSize, videoDuration);
+          video.onCanPlay.first.then((_) {
+            print('Duration: ${video.duration}');
+            videoDuration = video.duration.toInt();
+            video.remove();
+            html.Url.revokeObjectUrl(blobUrl);
+
+            print("Setting: " + videoDuration.toString());
+            widget.onUpload(bytes, file.name, fileSize, videoDuration);
+          });
+
           // final success = await uploadVideoBackend(bytes, file.name);
           // setState(() {
           //   _isUploading = false;

@@ -152,7 +152,15 @@ class _UploadOverviewState extends State<UploadOverview> {
                 backgroundColor: Theme.of(context).colorScheme.primary,
                 label: Text(widget.fileSize),
               ),
-            )
+            ),
+            Padding(
+                padding: const EdgeInsets.only(left: 8),
+                child: Badge(
+                  backgroundColor: Theme.of(context).colorScheme.primary,
+                  label: Text(
+                    "${widget.videoDuration}s",
+                  ),
+                ))
           ],
         ),
         const Spacer(),
