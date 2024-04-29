@@ -27,7 +27,6 @@ class _BorVideoPlayerState extends State<BorVideoPlayer> {
           looping: false,
           autoInitialize: false);
     });
-    _chewieController.pause();
   }
 
   @override
