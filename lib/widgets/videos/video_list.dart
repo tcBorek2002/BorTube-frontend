@@ -3,11 +3,11 @@ import 'package:bortube_frontend/widgets/videos/video_card.dart';
 import 'package:flutter/material.dart';
 
 class VideoList extends StatelessWidget {
-  const VideoList(
-      {super.key, required this.videos, required this.refreshVideos});
+  VideoList({super.key, required this.videos, required this.refreshVideos});
 
   final List<Video>? videos;
   final Function() refreshVideos;
+  final _scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -17,9 +17,11 @@ class VideoList extends StatelessWidget {
     return SizedBox(
       height: 200,
       child: Scrollbar(
+        controller: _scrollController,
         trackVisibility: true,
         thumbVisibility: true,
         child: ListView.builder(
+          controller: _scrollController,
           scrollDirection: Axis.horizontal,
           shrinkWrap: true,
           itemCount: videos!.length,
