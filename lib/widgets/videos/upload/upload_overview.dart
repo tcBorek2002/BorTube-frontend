@@ -52,7 +52,7 @@ class _UploadOverviewState extends State<UploadOverview> {
           content: Text("The video was successfully uploaded!"),
           backgroundColor: Colors.green,
         ));
-        context.go("/video/$result");
+        context.go("/video/${dto.id}");
         widget.closeDialog();
       } else {
         onUploadFailed();
