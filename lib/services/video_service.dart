@@ -124,11 +124,6 @@ Future<int> uploadAzure(
   final videoFile =
       http.MultipartFile.fromBytes('video', bytes, filename: filename);
 
-  // VideoPlayerController controller =
-  //     VideoPlayerController.file(File.fromRawPath(Uint8List.fromList(bytes)));
-  // await controller.initialize();
-  // Duration videoDuration = controller.value.duration;
-
   final request = http.MultipartRequest('PUT', Uri.parse(azureSASUrl));
   request.files.add(videoFile);
 
