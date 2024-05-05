@@ -23,7 +23,7 @@ Future<List<Video>> getAllVideos() async {
   }
 }
 
-Future<Video> getVideo(int videoID) async {
+Future<Video> getVideo(String videoID) async {
   final response = await http.get(Uri.parse('$videosURL/$videoID'));
 
   if (response.statusCode == 200) {
@@ -62,7 +62,7 @@ Future<CreateVideoDto> createVideo(
   }
 }
 
-Future<bool> videoUploaded(int videoId, String fileName) async {
+Future<bool> videoUploaded(String videoId, String fileName) async {
   final response = await http.post(
     Uri.parse('$videosURL/$videoId/uploaded'),
     headers: <String, String>{
@@ -79,7 +79,7 @@ Future<bool> videoUploaded(int videoId, String fileName) async {
   }
 }
 
-Future<bool> deleteVideo(int id) async {
+Future<bool> deleteVideo(String id) async {
   final response = await http.delete(
     Uri.parse('$videosURL/$id'),
   );
@@ -119,8 +119,8 @@ Future<int> uploadVideoBackend(
   }
 }
 
-Future<int> uploadAzure(
-    List<int> bytes, String filename, String azureSASUrl, int videoId) async {
+Future<int> uploadAzure(List<int> bytes, String filename, String azureSASUrl,
+    String videoId) async {
   // final videoFile =
   //     http.MultipartFile.fromBytes('video', bytes, filename: filename);
 

@@ -20,14 +20,9 @@ class _VideoPageState extends State<VideoPage> {
     super.initState();
     try {
       if (widget.videoID != null) {
-        int? idParsed = int.tryParse(widget.videoID!);
-        if (idParsed != null) {
-          setState(() {
-            video = getVideo(idParsed);
-          });
-        } else {
-          video = Future.value(null);
-        }
+        setState(() {
+          video = getVideo(widget.videoID!);
+        });
       } else {
         video = Future.value(null);
       }

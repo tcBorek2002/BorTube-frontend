@@ -1,5 +1,5 @@
 class Video {
-  int id;
+  String id;
   String title;
   String description;
   String? videoUrl;
@@ -13,7 +13,7 @@ class Video {
       // Handle a single video object
       final videoFile = json['videoFile'] as Map<String, dynamic>;
       return Video(
-        json['id'] as int,
+        json['id'] as String,
         json['title'] as String,
         json['description'] as String,
         videoFile['videoUrl'] as String?,
@@ -34,7 +34,7 @@ class Video {
       final List<Video> videos = jsonList.map((json) {
         final videoFile = json['videoFile'] as Map<String, dynamic>;
         return Video(
-          json['id'] as int,
+          json['id'] as String,
           json['title'] as String,
           json['description'] as String,
           videoFile['videoUrl'] as String?,

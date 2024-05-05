@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
-import 'package:video_player/video_player.dart';
 
 class UploadOverview extends StatefulWidget {
   const UploadOverview(

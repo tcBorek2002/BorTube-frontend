@@ -1,5 +1,5 @@
 class CreateVideoDto {
-  int id;
+  String id;
   String title;
   String description;
   String videoState;
@@ -13,7 +13,7 @@ class CreateVideoDto {
       // Handle a single video object
       final video = json['video'] as Map<String, dynamic>;
       return CreateVideoDto(
-        video['id'] as int,
+        video['id'] as String,
         video['title'] as String,
         video['description'] as String,
         video['videoState'] as String,
