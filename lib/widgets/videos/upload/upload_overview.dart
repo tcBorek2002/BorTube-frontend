@@ -46,7 +46,7 @@ class _UploadOverviewState extends State<UploadOverview> {
     int result =
         await uploadAzure(widget.bytes, widget.fileName, dto.sasUrl, dto.id);
     if (result > 0) {
-      await Future.delayed(const Duration(seconds: 1)); // Wait for one second
+      await Future.delayed(const Duration(seconds: 5)); // Wait for five seconds
       bool uploaded = await videoUploaded(dto.id, widget.fileName);
       if (uploaded) {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
