@@ -2,12 +2,13 @@ class Video {
   int id;
   String title;
   String description;
-  String videoUrl;
-  int duration;
+  String? videoUrl;
+  int? duration;
 
   Video(this.id, this.title, this.description, this.videoUrl, this.duration);
 
   factory Video.fromJson(dynamic json) {
+    print("Decoding: $json");
     if (json is Map<String, dynamic>) {
       // Handle a single video object
       final videoFile = json['videoFile'] as Map<String, dynamic>;
@@ -15,8 +16,8 @@ class Video {
         json['id'] as int,
         json['title'] as String,
         json['description'] as String,
-        videoFile['videoUrl'] as String,
-        videoFile['duration'] as int,
+        videoFile['videoUrl'] as String?,
+        videoFile['duration'] as int?,
       );
     } else if (json is List<dynamic>) {
       // Handle an array of video objects
@@ -36,8 +37,8 @@ class Video {
           json['id'] as int,
           json['title'] as String,
           json['description'] as String,
-          videoFile['videoUrl'] as String,
-          videoFile['duration'] as int,
+          videoFile['videoUrl'] as String?,
+          videoFile['duration'] as int?,
         );
       }).toList();
 

@@ -29,6 +29,7 @@ class _VideoUploadWidgetState extends State<VideoUploadWidget> {
         html.VideoElement video = html.VideoElement();
         String blobUrl = html.Url.createObjectUrl(file);
 
+        // Why is video.src set to this?
         video.src = blobUrl;
 
         final reader = html.FileReader();

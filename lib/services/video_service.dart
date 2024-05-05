@@ -121,18 +121,17 @@ Future<int> uploadVideoBackend(
 
 Future<int> uploadAzure(
     List<int> bytes, String filename, String azureSASUrl, int videoId) async {
-  final videoFile =
-      http.MultipartFile.fromBytes('video', bytes, filename: filename);
+  // final videoFile =
+  //     http.MultipartFile.fromBytes('video', bytes, filename: filename);
 
-  final request = http.MultipartRequest('PUT', Uri.parse(azureSASUrl));
-  request.files.add(videoFile);
+  final response = await http.put(Uri.parse(azureSASUrl),
+      headers: {
+        'x-ms-blob-type': 'BlockBlob',
+        'x-ms-tags': 'videoId=$videoId',
+        'Content-Type': 'application/octet-stream'
+      },
+      body: bytes);
 
-  request.headers['Content-Type'] = 'multipart/form-data';
-  request.headers['x-ms-blob-type'] = 'BlockBlob';
-  request.headers['x-ms-tags'] = 'videoId=$videoId';
-
-  final streamedResponse = await request.send();
-  final response = await http.Response.fromStream(streamedResponse);
   if (response.statusCode == 201) {
     print("Video uploaded to Azure");
     return 1;

@@ -49,6 +49,8 @@ class _VideoPageState extends State<VideoPage> {
         if (snapshot.hasData) {
           if (snapshot.data == null) {
             return const Text("404 - Video not found");
+          } else if (snapshot.data?.videoUrl == null) {
+            return const Text("404 - Video not found");
           }
           return SizedBox(
             width: MediaQuery.of(context).size.width * 0.9,
@@ -66,7 +68,7 @@ class _VideoPageState extends State<VideoPage> {
                   Padding(
                     padding: const EdgeInsets.only(top: 8.0),
                     child: BorVideoPlayer(
-                      videoURL: snapshot.data!.videoUrl,
+                      videoURL: snapshot.data!.videoUrl!,
                     ),
                   ),
                   Padding(

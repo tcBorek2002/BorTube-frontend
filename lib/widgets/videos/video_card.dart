@@ -47,7 +47,9 @@ class VideoCard extends StatelessWidget {
                         style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
                       const Spacer(),
-                      Text(formatDuration(video.duration)),
+                      video.duration != null
+                          ? Text(formatDuration(video.duration!))
+                          : const SizedBox.shrink(),
                       IconButton(
                           onPressed: () {
                             ScaffoldMessenger.of(context).showSnackBar(
