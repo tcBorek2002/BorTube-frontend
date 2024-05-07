@@ -18,6 +18,15 @@ class NavBar extends StatelessWidget {
             height: 45,
           ),
         ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 10),
+            child: ElevatedButton.icon(
+                onPressed: () {},
+                icon: const Icon(Icons.account_circle_rounded),
+                label: const Text("Log in")),
+          )
+        ],
       ),
       body: child,
     );

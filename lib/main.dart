@@ -50,6 +50,7 @@ class MyApp extends StatelessWidget {
     );
 
     return MaterialApp.router(
+      debugShowCheckedModeBanner: false,
       title: 'BorTube',
       routerConfig: _router,
       theme: ThemeData(
