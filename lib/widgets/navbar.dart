@@ -22,7 +22,7 @@ class NavBar extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(right: 10),
             child: ElevatedButton.icon(
-                onPressed: () {},
+                onPressed: () => context.go('/login'),
                 icon: const Icon(Icons.account_circle_rounded),
                 label: const Text("Log in")),
           )
