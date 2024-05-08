@@ -4,6 +4,9 @@ import 'package:bortube_frontend/services/video_service.dart';
 import 'package:bortube_frontend/widgets/user/user_info_form.dart';
 import 'package:bortube_frontend/widgets/videos/bor_videoplayer.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../objects/video.dart';
 
@@ -37,6 +40,24 @@ class _UserScreenState extends State<UserScreen> {
   @override
   void dispose() {
     super.dispose();
+  }
+
+  Future<void> logoutUser() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.remove("loggedInUser");
+
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    userProvider.setUser(null);
+
+    await logoutUserBackend();
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('You have been logged out.'),
+        backgroundColor: Colors.green,
+      ),
+    );
+    context.go('/');
   }
 
   @override
@@ -101,7 +122,7 @@ class _UserScreenState extends State<UserScreen> {
                             backgroundColor:
                                 MaterialStateProperty.all<Color>(Colors.red),
                           ),
-                          onPressed: () {},
+                          onPressed: logoutUser,
                           icon: const Icon(Icons.logout_rounded),
                           label: const Text("Logout"),
                         ),

@@ -54,3 +54,21 @@ Future<User> getUserBackend(String userId) async {
         'Failed to retrieve user information. Status code: ${response.statusCode}');
   }
 }
+
+/// Logs out the user from the backend server.
+///
+/// Sends a POST request to the backend server to log out the user.
+/// Returns a [Future] that resolves to a [bool] indicating whether the logout was successful.
+Future<bool> logoutUserBackend() async {
+  final headers = {
+    HttpHeaders.acceptHeader: 'application/json',
+  };
+  final response =
+      await http.post(Uri.parse("${baseUrl}logout"), headers: headers);
+
+  if (response.statusCode == 200) {
+    return true;
+  } else {
+    return false;
+  }
+}
