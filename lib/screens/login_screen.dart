@@ -1,3 +1,4 @@
+import 'package:bortube_frontend/services/user_service.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -30,14 +31,50 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  bool _loading = false;
 
-  void submitLogin() {
+  Future<void> submitLogin() async {
     if (_formKey.currentState!.validate()) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Processing Data')),
-      );
+      setState(() {
+        _loading = true;
+      });
+      // Wait one second:
+      await Future.delayed(const Duration(seconds: 1));
       String email = emailController.text;
       String password = passwordController.text;
+      String userId = await loginUserBackend(email, password).catchError((e) {
+        setState(() {
+          _loading = false;
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content:
+                Text('Error while logging in. Please try again later. Error:'),
+            backgroundColor: Colors.red,
+          ),
+        );
+        throw e;
+      });
+      setState(() {
+        _loading = false;
+      });
+      print("UserId logged in: $userId");
+      if (userId == "400") {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Email or password is incorrect. Please try again.'),
+            backgroundColor: Colors.red,
+          ),
+        );
+        return;
+      }
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Logged in successfully!'),
+          backgroundColor: Colors.green,
+        ),
+      );
+      context.go('/user/$userId');
     }
   }
 
@@ -59,19 +96,22 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: Column(
                         children: [
                           TextFormField(
+                              autofocus: true,
                               autofillHints: [AutofillHints.email],
                               controller: emailController,
                               keyboardType: TextInputType.emailAddress,
+                              onFieldSubmitted: (value) => submitLogin(),
                               decoration: const InputDecoration(
                                 icon: Icon(Icons.alternate_email_rounded),
                                 border: OutlineInputBorder(),
                                 labelText: 'Email',
                               ),
                               validator: validateEmail),
-                          SizedBox(height: 16.0),
+                          const SizedBox(height: 16.0),
                           TextFormField(
                             autofillHints: [AutofillHints.password],
                             controller: passwordController,
+                            onFieldSubmitted: (value) => submitLogin(),
                             decoration: const InputDecoration(
                               icon: Icon(Icons.key_rounded),
                               border: OutlineInputBorder(),
@@ -85,10 +125,21 @@ class _LoginScreenState extends State<LoginScreen> {
                             },
                             obscureText: true,
                           ),
-                          SizedBox(height: 16.0),
-                          ElevatedButton(
-                            onPressed: submitLogin,
-                            child: Text('Login'),
+                          const SizedBox(height: 16.0),
+                          ElevatedButton.icon(
+                            onPressed: _loading ? null : submitLogin,
+                            icon: _loading
+                                ? Container(
+                                    width: 24,
+                                    height: 24,
+                                    padding: const EdgeInsets.all(2.0),
+                                    child: const CircularProgressIndicator(
+                                      color: Colors.white,
+                                      strokeWidth: 3,
+                                    ),
+                                  )
+                                : const Icon(Icons.login_rounded),
+                            label: const Text('Login'),
                             style: ElevatedButton.styleFrom(
                               elevation: 2,
                               backgroundColor:
@@ -99,10 +150,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       )),
                 ),
               ),
-              SizedBox(height: 16.0),
+              const SizedBox(height: 16.0),
               TextButton(
                 onPressed: () => context.go('/register'),
-                child: Text('Register new account'),
+                child: const Text('Register new account'),
               ),
             ],
           ),
