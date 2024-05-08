@@ -1,6 +1,9 @@
+import 'package:bortube_frontend/objects/user.dart';
 import 'package:bortube_frontend/services/user_service.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 String? validateEmail(String? value) {
   if (value == null || value.isEmpty) {
@@ -68,6 +71,24 @@ class _LoginScreenState extends State<LoginScreen> {
         );
         return;
       }
+      var user = await getUserBackend(userId).catchError((error) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Error while fetching user data. Please try again.'),
+            backgroundColor: Colors.red,
+          ),
+        );
+        throw error;
+      });
+
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setStringList(
+          "loggedInUser", [user.id, user.email, user.displayName]);
+
+      // Access the UserProvider and update the user data
+      final userProvider = Provider.of<UserProvider>(context, listen: false);
+      userProvider.setUser(user as User?);
+
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Logged in successfully!'),

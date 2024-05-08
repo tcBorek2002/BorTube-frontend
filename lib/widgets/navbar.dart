@@ -1,5 +1,7 @@
+import 'package:bortube_frontend/objects/user.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 class NavBar extends StatelessWidget {
   const NavBar({super.key, required this.child});
@@ -8,6 +10,9 @@ class NavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context);
+    final user = userProvider.user;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
@@ -22,9 +27,11 @@ class NavBar extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(right: 10),
             child: ElevatedButton.icon(
-                onPressed: () => context.go('/login'),
+                onPressed: user == null
+                    ? () => context.go('/login')
+                    : () => context.go('/user/${user.id}'),
                 icon: const Icon(Icons.account_circle_rounded),
-                label: const Text("Log in")),
+                label: Text(user == null ? 'Login' : user.displayName)),
           )
         ],
       ),

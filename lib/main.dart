@@ -1,15 +1,24 @@
+import 'package:bortube_frontend/objects/user.dart';
 import 'package:bortube_frontend/screens/error_screen.dart';
 import 'package:bortube_frontend/screens/home_screen.dart';
 import 'package:bortube_frontend/screens/login_screen.dart';
+import 'package:bortube_frontend/screens/user_screen.dart';
 import 'package:bortube_frontend/screens/video_screen.dart';
 import 'package:bortube_frontend/widgets/navbar.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   usePathUrlStrategy();
-  runApp(MyApp());
+  runApp(ChangeNotifierProvider(
+      create: (context) {
+        final userProvider = UserProvider();
+        userProvider.loadUserFromSharedPreferences();
+        return userProvider;
+      },
+      child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -41,6 +50,11 @@ class MyApp extends StatelessWidget {
                 path: '/video/:id',
                 builder: (context, state) =>
                     VideoPage(videoID: state.pathParameters['id']),
+              ),
+              GoRoute(
+                path: '/user/:id',
+                builder: (context, state) =>
+                    UserScreen(userId: state.pathParameters['id']),
               ),
               GoRoute(
                   path: '/test',
