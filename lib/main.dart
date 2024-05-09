@@ -2,6 +2,7 @@ import 'package:bortube_frontend/objects/user.dart';
 import 'package:bortube_frontend/screens/error_screen.dart';
 import 'package:bortube_frontend/screens/home_screen.dart';
 import 'package:bortube_frontend/screens/login_screen.dart';
+import 'package:bortube_frontend/screens/register_screen.dart';
 import 'package:bortube_frontend/screens/user_screen.dart';
 import 'package:bortube_frontend/screens/video_screen.dart';
 import 'package:bortube_frontend/widgets/navbar.dart';
@@ -61,7 +62,10 @@ class MyApp extends StatelessWidget {
                   builder: (context, state) => const ErrorScreen()),
               GoRoute(
                   path: '/login',
-                  builder: (context, state) => const LoginScreen())
+                  builder: (context, state) => const LoginScreen()),
+              GoRoute(
+                  path: '/register',
+                  builder: (context, state) => const RegisterScreen())
             ])
       ],
       errorBuilder: (context, state) => const ErrorScreen(),

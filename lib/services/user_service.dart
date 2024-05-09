@@ -61,6 +61,29 @@ Future<User> getUserBackend(String userId) async {
   }
 }
 
+/// Creates a new user with the given [email], [password], and [displayName].
+/// Returns a [Future] that completes with a [bool] indicating whether the user creation was successful.
+Future<bool> createUserBackend(
+    String email, String password, String displayName) async {
+  final url = Uri.parse("${baseUrl}users");
+  final headers = {
+    'accept': 'application/json',
+    'Content-Type': 'application/json',
+  };
+  final body = jsonEncode({
+    'email': email,
+    'password': password,
+    'displayName': displayName,
+  });
+
+  final response = await http.post(url, headers: headers, body: body);
+  if (response.statusCode == 201) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
 /// Updates user information on the backend server.
 ///
 /// Takes in the [userId] of the user and [email], [password], [displayName] as the updated user information.

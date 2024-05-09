@@ -1,9 +1,11 @@
 import 'package:bortube_frontend/objects/user.dart';
+import 'package:bortube_frontend/screens/login_screen.dart';
 import 'package:bortube_frontend/screens/register_screen.dart';
 import 'package:bortube_frontend/services/user_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -43,6 +45,7 @@ class _UserInfoFormState extends State<UserInfoForm> {
         // Access the UserProvider and update the user data
         final userProvider = Provider.of<UserProvider>(context, listen: false);
         userProvider.loadUserFromSharedPreferences();
+
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('User updated successfully.'),
@@ -66,6 +69,25 @@ class _UserInfoFormState extends State<UserInfoForm> {
   Future<void> createUser() async {
     if (_formKey.currentState!.validate()) {
       // Save changes logic
+      bool success = await createUserBackend(_emailController.text,
+          _passwordController.text, _displayNameController.text);
+      if (success) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Account created! You can now log in.'),
+            backgroundColor: Colors.green,
+          ),
+        );
+
+        context.go('/login');
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Error while registering. Please try again later.'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
     }
   }
 
@@ -104,11 +126,12 @@ class _UserInfoFormState extends State<UserInfoForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: MediaQuery.of(context).size.width * 0.5,
       child: Form(
         key: _formKey,
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
             TextFormField(
               controller: _emailController,
@@ -140,7 +163,11 @@ class _UserInfoFormState extends State<UserInfoForm> {
             SizedBox(height: 16.0),
             TextFormField(
               controller: _passwordController,
-              autofillHints: [AutofillHints.password],
+              autofillHints: [
+                widget.shouldCreate
+                    ? AutofillHints.newPassword
+                    : AutofillHints.password
+              ],
               decoration: const InputDecoration(
                 icon: Icon(Icons.key_rounded),
                 border: OutlineInputBorder(),
