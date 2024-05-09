@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:html';
 import 'dart:io';
 
 import 'package:bortube_frontend/objects/user.dart';
@@ -23,6 +24,9 @@ Future<String> loginUserBackend(String email, String password) async {
   };
   final response = await http.post(Uri.parse("${baseUrl}login"),
       headers: headers, body: body);
+
+  // Cookie cookie = Cookie.fromSetCookieValue(response.headers['set-cookie']!);
+  // document.cookie = cookie.toString();
 
   if (response.statusCode == 200) {
     var body = jsonDecode(response.body);
@@ -62,6 +66,7 @@ Future<User> getUserBackend(String userId) async {
 /// Sends a POST request to the backend server to log out the user.
 /// Returns a [Future] that resolves to a [bool] indicating whether the logout was successful.
 Future<bool> logoutUserBackend() async {
+  // document.cookie = "";
   final headers = {
     HttpHeaders.acceptHeader: 'application/json',
   };
