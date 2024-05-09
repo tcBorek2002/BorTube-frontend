@@ -61,6 +61,45 @@ Future<User> getUserBackend(String userId) async {
   }
 }
 
+/// Updates user information on the backend server.
+///
+/// Takes in the [userId] of the user and [email], [password], [displayName] as the updated user information.
+/// Sends a PUT request to the backend server to update the user information.
+/// Returns a [Future] that resolves to a [bool] indicating whether the update was successful.
+Future<bool> updateUserBackend(
+    String userId, String? email, String? password, String? displayName) async {
+  Map<String, dynamic> requestBody = {};
+
+  if (email != null) {
+    requestBody['email'] = email;
+  }
+
+  if (password != null) {
+    requestBody['password'] = password;
+  }
+
+  if (displayName != null) {
+    requestBody['displayName'] = displayName;
+  }
+
+  final headers = {
+    HttpHeaders.acceptHeader: 'application/json',
+    HttpHeaders.contentTypeHeader: 'application/json',
+  };
+
+  final response = await http.put(
+    Uri.parse("${baseUrl}users/$userId"),
+    headers: headers,
+    body: jsonEncode(requestBody),
+  );
+
+  if (response.statusCode == 200) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
 /// Logs out the user from the backend server.
 ///
 /// Sends a POST request to the backend server to log out the user.

@@ -84,7 +84,10 @@ class _UserScreenState extends State<UserScreen> {
                       ),
                     ),
                     const SizedBox(height: 20),
-                    UserInfoForm(user: snapshot.data!),
+                    UserInfoForm(
+                      user: snapshot.data!,
+                      shouldCreate: false,
+                    ),
                     const SizedBox(height: 20),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,

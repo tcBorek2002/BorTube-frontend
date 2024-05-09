@@ -1,12 +1,16 @@
 import 'package:bortube_frontend/objects/user.dart';
+import 'package:bortube_frontend/screens/login_screen.dart';
+import 'package:bortube_frontend/services/user_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class UserInfoForm extends StatefulWidget {
-  const UserInfoForm({super.key, required this.user});
+  const UserInfoForm(
+      {super.key, required this.user, required this.shouldCreate});
 
-  final User user;
+  final User? user;
+  final bool shouldCreate;
 
   @override
   State<UserInfoForm> createState() => _UserInfoFormState();
@@ -20,11 +24,54 @@ class _UserInfoFormState extends State<UserInfoForm> {
 
   bool _hasChanges = false;
 
+  Future<void> updateUser() async {
+    if (_formKey.currentState!.validate()) {
+      String? password = _passwordController.text;
+      if (password.isEmpty) {
+        password = null;
+      }
+      bool success = await updateUserBackend(widget.user!.id,
+          _emailController.text, password, _displayNameController.text);
+      if (success) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('User updated successfully.'),
+            backgroundColor: Colors.green,
+          ),
+        );
+        setState(() {
+          _hasChanges = false;
+        });
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Error while updating user. Please try again later.'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
+  }
+
+  Future<void> createUser() async {
+    if (_formKey.currentState!.validate()) {
+      // Save changes logic
+    }
+  }
+
   @override
   void initState() {
     super.initState();
-    _emailController.text = widget.user.email;
-    _displayNameController.text = widget.user.displayName;
+    if (widget.user != null) {
+      _emailController.text = widget.user!.email;
+      _displayNameController.text = widget.user!.displayName;
+    }
+
+    if (widget.shouldCreate) {
+      setState(() {
+        _hasChanges = true;
+      });
+    }
 
     _emailController.addListener(() {
       setState(() {
@@ -62,9 +109,7 @@ class _UserInfoFormState extends State<UserInfoForm> {
                 border: OutlineInputBorder(),
                 labelText: 'Email',
               ),
-              onChanged: (value) {
-                widget.user.email = value;
-              },
+              validator: validateEmail,
             ),
             SizedBox(height: 16.0),
             TextFormField(
@@ -75,8 +120,11 @@ class _UserInfoFormState extends State<UserInfoForm> {
                 border: OutlineInputBorder(),
                 labelText: 'Display Name',
               ),
-              onChanged: (value) {
-                widget.user.displayName = value;
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter a display name';
+                }
+                return null;
               },
             ),
             SizedBox(height: 16.0),
@@ -88,6 +136,14 @@ class _UserInfoFormState extends State<UserInfoForm> {
                 border: OutlineInputBorder(),
                 labelText: 'Password',
               ),
+              validator: widget.shouldCreate
+                  ? (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter a password';
+                      }
+                      return null;
+                    }
+                  : null,
               obscureText: true,
             ),
             SizedBox(height: 16.0),
@@ -96,10 +152,9 @@ class _UserInfoFormState extends State<UserInfoForm> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   ElevatedButton(
-                    onPressed: () {
-                      // Save changes logic
-                    },
-                    child: const Text('Save changes'),
+                    onPressed: widget.shouldCreate ? createUser : updateUser,
+                    child:
+                        Text(widget.shouldCreate ? 'Register' : 'Save changes'),
                   ),
                 ],
               ),
