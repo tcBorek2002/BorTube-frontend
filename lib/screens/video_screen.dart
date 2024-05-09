@@ -79,9 +79,9 @@ class _VideoPageState extends State<VideoPage> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const Row(
+                                  Row(
                                     children: [
-                                      Padding(
+                                      const Padding(
                                         padding:
                                             EdgeInsets.symmetric(horizontal: 8),
                                         child: CircleAvatar(
@@ -89,8 +89,8 @@ class _VideoPageState extends State<VideoPage> {
                                         ),
                                       ),
                                       Text(
-                                        "Username",
-                                        style: TextStyle(
+                                        snapshot.data!.user.displayName,
+                                        style: const TextStyle(
                                             fontWeight: FontWeight.bold),
                                       )
                                     ],
