@@ -4,6 +4,7 @@ import 'dart:typed_data';
 
 import 'package:bortube_frontend/objects/createVideoDto.dart';
 import 'package:bortube_frontend/objects/video.dart';
+import 'package:http/browser_client.dart';
 import 'package:http/http.dart' as http;
 import 'package:video_player/video_player.dart';
 
@@ -124,7 +125,10 @@ Future<int> uploadAzure(List<int> bytes, String filename, String azureSASUrl,
   // final videoFile =
   //     http.MultipartFile.fromBytes('video', bytes, filename: filename);
 
-  final response = await http.put(Uri.parse(azureSASUrl),
+  var client = BrowserClient();
+  client.withCredentials = false;
+
+  final response = await client.put(Uri.parse(azureSASUrl),
       headers: {
         'x-ms-blob-type': 'BlockBlob',
         'x-ms-tags': 'videoId=$videoId',
