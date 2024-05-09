@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:bortube_frontend/objects/user.dart';
+import 'package:http/browser_client.dart';
 import 'package:http/http.dart' as http;
 
 const baseUrl = "http://localhost:8000/";
@@ -16,6 +17,7 @@ Future<String> loginUserBackend(String email, String password) async {
     'username': email,
     'password': password,
   });
+
   final headers = {
     HttpHeaders.contentTypeHeader: 'application/json',
   };
