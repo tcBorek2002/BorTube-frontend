@@ -1,9 +1,11 @@
 import 'package:bortube_frontend/objects/user.dart';
-import 'package:bortube_frontend/screens/login_screen.dart';
+import 'package:bortube_frontend/screens/register_screen.dart';
 import 'package:bortube_frontend/services/user_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class UserInfoForm extends StatefulWidget {
   const UserInfoForm(
@@ -33,6 +35,14 @@ class _UserInfoFormState extends State<UserInfoForm> {
       bool success = await updateUserBackend(widget.user!.id,
           _emailController.text, password, _displayNameController.text);
       if (success) {
+        final SharedPreferences prefs = await SharedPreferences.getInstance();
+        String currentId = prefs.getStringList("loggedInUser")![0];
+        prefs.setStringList("loggedInUser",
+            [currentId, _emailController.text, _displayNameController.text]);
+
+        // Access the UserProvider and update the user data
+        final userProvider = Provider.of<UserProvider>(context, listen: false);
+        userProvider.loadUserFromSharedPreferences();
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('User updated successfully.'),
