@@ -90,8 +90,9 @@ class _LoginScreenState extends State<LoginScreen> {
       userProvider.setUser(user as User?);
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Logged in successfully!'),
+        SnackBar(
+          content:
+              Text('Welcome ${user.displayName}, you have been logged in.'),
           backgroundColor: Colors.green,
         ),
       );
