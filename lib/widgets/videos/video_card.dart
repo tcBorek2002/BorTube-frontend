@@ -56,6 +56,7 @@ class _VideoCardState extends State<VideoCard> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: SizedBox(
+                  height: 40,
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
