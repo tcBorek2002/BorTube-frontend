@@ -1,9 +1,12 @@
 import 'package:bortube_frontend/objects/createVideoDto.dart';
+import 'package:bortube_frontend/objects/user.dart';
+import 'package:bortube_frontend/services/user_service.dart';
 import 'package:bortube_frontend/services/video_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class UploadOverview extends StatefulWidget {
   const UploadOverview(
@@ -36,9 +39,13 @@ class _UploadOverviewState extends State<UploadOverview> {
     });
 
     CreateVideoDto dto = await createVideo(widget.title, widget.description,
-            widget.videoDuration, widget.fileName)
+            widget.videoDuration, widget.fileName, context)
         .catchError((error) {
-      onUploadFailed();
+      if (error.toString().contains("500")) {
+        onUploadFailed();
+      } else {
+        widget.closeDialog();
+      }
       throw error;
     });
 

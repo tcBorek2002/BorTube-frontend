@@ -3,12 +3,36 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:bortube_frontend/objects/createVideoDto.dart';
+import 'package:bortube_frontend/objects/user.dart';
 import 'package:bortube_frontend/objects/video.dart';
+import 'package:bortube_frontend/services/user_service.dart';
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:http/browser_client.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:video_player/video_player.dart';
 
 const videosURL = "http://localhost:8000/videos";
+
+Future<void> userShouldLogin(BuildContext context) async {
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  prefs.remove("loggedInUser");
+
+  final userProvider = Provider.of<UserProvider>(context, listen: false);
+  userProvider.setUser(null);
+
+  await logoutUserBackend();
+
+  ScaffoldMessenger.of(context).showSnackBar(
+    const SnackBar(
+      content: Text('You need to login before you can do this!'),
+      backgroundColor: Colors.red,
+    ),
+  );
+  context.go('/login');
+}
 
 Future<List<Video>> getAllVideos() async {
   final response = await http.get(Uri.parse(videosURL));
@@ -40,15 +64,14 @@ Future<Video> getVideo(String videoID) async {
   }
 }
 
-Future<CreateVideoDto> createVideo(
-    String title, String description, int duration, String fileName) async {
+Future<CreateVideoDto> createVideo(String title, String description,
+    int duration, String fileName, BuildContext context) async {
   String body = jsonEncode(<String, dynamic>{
     'title': title,
     'description': description,
     'fileName': fileName,
     'duration': duration,
   });
-  print(body);
   final response = await http.post(
     Uri.parse(videosURL),
     headers: <String, String>{
@@ -58,8 +81,11 @@ Future<CreateVideoDto> createVideo(
   );
   if (response.statusCode == 201) {
     return CreateVideoDto.fromJson(jsonDecode(response.body));
+  } else if (response.statusCode == 401) {
+    await userShouldLogin(context);
+    throw Exception('401 - Unauthorized');
   } else {
-    throw Exception('Failed to create video.');
+    throw Exception('500 - Failed to create video.');
   }
 }
 
