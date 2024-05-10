@@ -8,9 +8,18 @@ import 'package:provider/provider.dart';
 
 String formatDuration(int seconds) {
   Duration duration = Duration(seconds: seconds);
-  String formattedDuration =
-      '${duration.inMinutes.remainder(60)}:${(duration.inSeconds.remainder(60)).toString().padLeft(2, '0')}';
-  return formattedDuration;
+  String twoDigits(int n) {
+    if (n >= 10) return "$n";
+    return "0$n";
+  }
+
+  String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
+  String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
+  String twoDigitHours = twoDigits(duration.inHours);
+
+  return twoDigitHours != '00'
+      ? "$twoDigitHours:$twoDigitMinutes:$twoDigitSeconds"
+      : "$twoDigitMinutes:$twoDigitSeconds";
 }
 
 class VideoCard extends StatefulWidget {
