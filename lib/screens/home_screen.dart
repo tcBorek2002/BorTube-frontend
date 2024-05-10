@@ -25,7 +25,9 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     futureVideos = getAllVideos();
     final userProvider = Provider.of<UserProvider>(context, listen: false);
-    _user = userProvider.user;
+    setState(() {
+      _user = userProvider.user;
+    });
   }
 
   @override
