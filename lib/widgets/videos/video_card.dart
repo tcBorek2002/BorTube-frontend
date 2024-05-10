@@ -1,8 +1,10 @@
+import 'package:bortube_frontend/objects/user.dart';
 import 'package:bortube_frontend/objects/video.dart';
 import 'package:bortube_frontend/services/video_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 String formatDuration(int seconds) {
   Duration duration = Duration(seconds: seconds);
@@ -11,12 +13,26 @@ String formatDuration(int seconds) {
   return formattedDuration;
 }
 
-class VideoCard extends StatelessWidget {
+class VideoCard extends StatefulWidget {
   const VideoCard(
       {super.key, required this.video, required this.refreshVideos});
 
   final Video video;
   final Function() refreshVideos;
+
+  @override
+  State<VideoCard> createState() => _VideoCardState();
+}
+
+class _VideoCardState extends State<VideoCard> {
+  User? _user;
+
+  @override
+  void initState() {
+    super.initState();
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    _user = userProvider.user;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +43,7 @@ class VideoCard extends StatelessWidget {
           child: Column(
             children: [
               InkWell(
-                onTap: () => context.go('/video/${video.id}'),
+                onTap: () => context.go('/video/${widget.video.id}'),
                 child: Padding(
                   padding: const EdgeInsets.only(top: 8.0),
                   child: ClipRRect(
@@ -41,28 +57,31 @@ class VideoCard extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: SizedBox(
                   child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
-                        video.title,
+                        widget.video.title,
                         style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
                       const Spacer(),
-                      video.duration != null
-                          ? Text(formatDuration(video.duration!))
+                      widget.video.duration != null
+                          ? Text(formatDuration(widget.video.duration!))
                           : const SizedBox.shrink(),
-                      IconButton(
-                          onPressed: () {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                  content: Text('Deleting video...')),
-                            );
-                            deleteVideo(video.id);
-                            refreshVideos();
-                          },
-                          icon: const Icon(
-                            Icons.delete_rounded,
-                            color: Colors.red,
-                          ))
+                      _user != null && _user!.id == widget.video.user.id
+                          ? IconButton(
+                              onPressed: () {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                      content: Text('Deleting video...')),
+                                );
+                                deleteVideo(widget.video.id);
+                                widget.refreshVideos();
+                              },
+                              icon: const Icon(
+                                Icons.delete_rounded,
+                                color: Colors.red,
+                              ))
+                          : const SizedBox.shrink()
                     ],
                   ),
                 ),
