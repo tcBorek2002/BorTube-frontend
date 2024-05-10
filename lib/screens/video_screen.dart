@@ -38,84 +38,85 @@ class _VideoPageState extends State<VideoPage> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<Video?>(
-      future: video,
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          if (snapshot.data == null) {
-            return const Text("404 - Video not found");
-          } else if (snapshot.data?.videoUrl == null) {
-            return const Text("404 - Video not found");
-          }
-          return SizedBox(
-            width: MediaQuery.of(context).size.width * 0.9,
-            child: Card(
-                child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    snapshot.data!.title,
-                    style: const TextStyle(
-                        fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 8.0),
-                    child: BorVideoPlayer(
-                      videoURL: snapshot.data!.videoUrl!,
+    return SingleChildScrollView(
+      child: FutureBuilder<Video?>(
+        future: video,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            if (snapshot.data == null) {
+              return const Text("404 - Video not found");
+            } else if (snapshot.data?.videoUrl == null) {
+              return const Text("404 - Video not found");
+            }
+            return SizedBox(
+              width: MediaQuery.of(context).size.width * 0.9,
+              child: Card(
+                  child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      snapshot.data!.title,
+                      style: const TextStyle(
+                          fontSize: 20, fontWeight: FontWeight.bold),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 8.0),
-                    child: SizedBox(
-                        width: MediaQuery.sizeOf(context).width * 0.5,
-                        child: Card(
-                            color:
-                                Theme.of(context).cardColor.withOpacity(0.95),
-                            elevation: 2,
-                            child: Padding(
-                              padding: const EdgeInsets.only(top: 8.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    children: [
-                                      const Padding(
-                                        padding:
-                                            EdgeInsets.symmetric(horizontal: 8),
-                                        child: CircleAvatar(
-                                          child: Icon(Icons.person_rounded),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8.0),
+                      child: BorVideoPlayer(
+                        videoURL: snapshot.data!.videoUrl!,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8.0),
+                      child: SizedBox(
+                          width: MediaQuery.sizeOf(context).width * 0.5,
+                          child: Card(
+                              color:
+                                  Theme.of(context).cardColor.withOpacity(0.95),
+                              elevation: 2,
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 8.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        const Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 8),
+                                          child: CircleAvatar(
+                                            child: Icon(Icons.person_rounded),
+                                          ),
                                         ),
-                                      ),
-                                      Text(
-                                        snapshot.data!.user.displayName,
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      )
-                                    ],
-                                  ),
-                                  Padding(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(8, 8, 0, 8),
-                                    child: Text(
-                                      snapshot.data!.description,
+                                        Text(
+                                          snapshot.data!.user.displayName,
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        )
+                                      ],
                                     ),
-                                  ),
-                                ],
-                              ),
-                            ))),
-                  )
-                ],
-              ),
-            )),
-          );
-        } else if (snapshot.hasError) {
-          return Text('${snapshot.error}');
-        }
+                                    Padding(
+                                      padding: const EdgeInsets.all(8),
+                                      child: Text(
+                                        snapshot.data!.description,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ))),
+                    )
+                  ],
+                ),
+              )),
+            );
+          } else if (snapshot.hasError) {
+            return Text('${snapshot.error}');
+          }
 
-        return const Center(child: CircularProgressIndicator());
-      },
+          return const Center(child: CircularProgressIndicator());
+        },
+      ),
     );
   }
 }
