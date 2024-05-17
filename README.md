@@ -4,8 +4,8 @@ The frontend of BorTube, making use of Flutter.
 
 ## Docker
 
-First build the Docker image: docker build . -t frontend_bortube  
-Then run the image: docker run -p 8080:80 --name frontend_bortube frontend_bortube
+First build the Docker image: docker build . -t bortube_frontend  
+Then run the image: docker run -p 8080:80 --name bortube_frontend bortube_frontend
 
 Open the browser and go to http://localhost:8080
 
