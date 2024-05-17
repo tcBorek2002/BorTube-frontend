@@ -2,7 +2,10 @@ import 'dart:convert';
 import 'dart:html';
 import 'dart:io';
 
+import 'package:bortube_frontend/main.dart';
 import 'package:bortube_frontend/objects/user.dart';
+import 'package:bortube_frontend/services/video_service.dart';
+import 'package:flutter/material.dart';
 import 'package:http/browser_client.dart';
 import 'package:http/http.dart' as http;
 
@@ -22,7 +25,7 @@ Future<String> loginUserBackend(String email, String password) async {
   final headers = {
     HttpHeaders.contentTypeHeader: 'application/json',
   };
-  final response = await http.post(Uri.parse("${baseUrl}login"),
+  final response = await globalBrowserClient.post(Uri.parse("${baseUrl}login"),
       headers: headers, body: body);
 
   // Cookie cookie = Cookie.fromSetCookieValue(response.headers['set-cookie']!);
@@ -46,15 +49,18 @@ Future<String> loginUserBackend(String email, String password) async {
 /// Takes in the [userId] of the user and sends a GET request to the backend server
 /// to retrieve the user information. Returns a [Future] that resolves to a [Map<String, dynamic>]
 /// representing the user information if the request is successful, otherwise throws an exception.
-Future<User> getUserBackend(String userId) async {
+Future<User> getUserBackend(String userId, BuildContext context) async {
   final headers = {
     HttpHeaders.acceptHeader: 'application/json',
   };
-  final response =
-      await http.get(Uri.parse("${baseUrl}users/$userId"), headers: headers);
+  final response = await globalBrowserClient
+      .get(Uri.parse("${baseUrl}users/$userId"), headers: headers);
 
   if (response.statusCode == 200) {
     return User.fromJson(jsonDecode(response.body));
+  } else if (response.statusCode == 401) {
+    await userShouldLogin(context);
+    throw Exception('User not logged in.');
   } else {
     throw Exception(
         'Failed to retrieve user information. Status code: ${response.statusCode}');
@@ -76,7 +82,8 @@ Future<bool> createUserBackend(
     'displayName': displayName,
   });
 
-  final response = await http.post(url, headers: headers, body: body);
+  final response =
+      await globalBrowserClient.post(url, headers: headers, body: body);
   if (response.statusCode == 201) {
     return true;
   } else {
@@ -110,7 +117,7 @@ Future<bool> updateUserBackend(
     HttpHeaders.contentTypeHeader: 'application/json',
   };
 
-  final response = await http.put(
+  final response = await globalBrowserClient.put(
     Uri.parse("${baseUrl}users/$userId"),
     headers: headers,
     body: jsonEncode(requestBody),
@@ -132,8 +139,8 @@ Future<bool> logoutUserBackend() async {
   final headers = {
     HttpHeaders.acceptHeader: 'application/json',
   };
-  final response =
-      await http.post(Uri.parse("${baseUrl}logout"), headers: headers);
+  final response = await globalBrowserClient.post(Uri.parse("${baseUrl}logout"),
+      headers: headers);
 
   if (response.statusCode == 200) {
     return true;

@@ -9,7 +9,10 @@ import 'package:bortube_frontend/widgets/navbar.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
+import 'package:http/browser_client.dart';
 import 'package:provider/provider.dart';
+
+BrowserClient globalBrowserClient = BrowserClient()..withCredentials = true;
 
 void main() {
   usePathUrlStrategy();
@@ -22,11 +25,15 @@ void main() {
       child: MyApp()));
 }
 
-class MyApp extends StatelessWidget {
-  MyApp({super.key});
+class MyApp extends StatefulWidget {
+  const MyApp({super.key});
 
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   final _rootNavigatorKey = GlobalKey<NavigatorState>(debugLabel: "root bor");
-  final _shellNavigatorKey = GlobalKey<NavigatorState>(debugLabel: "shell bor");
 
   // This widget is the root of your application.
   @override
@@ -87,5 +94,11 @@ class MyApp extends StatelessWidget {
       ),
       themeMode: ThemeMode.system,
     );
+  }
+
+  @override
+  void dispose() {
+    globalBrowserClient.close();
+    super.dispose();
   }
 }

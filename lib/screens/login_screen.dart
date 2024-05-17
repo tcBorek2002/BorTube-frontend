@@ -71,7 +71,7 @@ class _LoginScreenState extends State<LoginScreen> {
         );
         return;
       }
-      var user = await getUserBackend(userId).catchError((error) {
+      var user = await getUserBackend(userId, context).catchError((error) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Error while fetching user data. Please try again.'),

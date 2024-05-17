@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:bortube_frontend/main.dart';
 import 'package:bortube_frontend/objects/createVideoDto.dart';
 import 'package:bortube_frontend/objects/user.dart';
 import 'package:bortube_frontend/objects/video.dart';
@@ -35,7 +36,7 @@ Future<void> userShouldLogin(BuildContext context) async {
 }
 
 Future<List<Video>> getAllVideos() async {
-  final response = await http.get(Uri.parse(videosURL));
+  final response = await globalBrowserClient.get(Uri.parse(videosURL));
 
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
@@ -49,7 +50,8 @@ Future<List<Video>> getAllVideos() async {
 }
 
 Future<Video> getVideo(String videoID) async {
-  final response = await http.get(Uri.parse('$videosURL/$videoID'));
+  final response =
+      await globalBrowserClient.get(Uri.parse('$videosURL/$videoID'));
 
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
@@ -72,7 +74,7 @@ Future<CreateVideoDto> createVideo(String title, String description,
     'fileName': fileName,
     'duration': duration,
   });
-  final response = await http.post(
+  final response = await globalBrowserClient.post(
     Uri.parse(videosURL),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
@@ -90,7 +92,7 @@ Future<CreateVideoDto> createVideo(String title, String description,
 }
 
 Future<bool> videoUploaded(String videoId, String fileName) async {
-  final response = await http.post(
+  final response = await globalBrowserClient.post(
     Uri.parse('$videosURL/$videoId/uploaded'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
@@ -107,7 +109,7 @@ Future<bool> videoUploaded(String videoId, String fileName) async {
 }
 
 Future<bool> deleteVideo(String id) async {
-  final response = await http.delete(
+  final response = await globalBrowserClient.delete(
     Uri.parse('$videosURL/$id'),
   );
   if (response.statusCode == 200) {
@@ -161,7 +163,7 @@ Future<int> uploadAzure(List<int> bytes, String filename, String azureSASUrl,
         'Content-Type': 'application/octet-stream'
       },
       body: bytes);
-
+  client.close();
   if (response.statusCode == 201) {
     print("Video uploaded to Azure");
     return 1;

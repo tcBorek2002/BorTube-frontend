@@ -27,7 +27,7 @@ class _UserScreenState extends State<UserScreen> {
     try {
       if (widget.userId != null) {
         setState(() {
-          user = getUserBackend(widget.userId!);
+          user = getUserBackend(widget.userId!, context);
         });
       } else {
         user = Future.value(null);
