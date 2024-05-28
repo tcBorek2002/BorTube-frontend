@@ -171,12 +171,15 @@ class _UserInfoFormState extends State<UserInfoForm> {
               decoration: const InputDecoration(
                 icon: Icon(Icons.key_rounded),
                 border: OutlineInputBorder(),
-                labelText: 'Password',
+                labelText: 'Password (at least 8 characters)',
               ),
               validator: widget.shouldCreate
                   ? (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter a password';
+                      }
+                      if (value.length < 8) {
+                        return 'Password must be at least 8 characters long';
                       }
                       return null;
                     }
