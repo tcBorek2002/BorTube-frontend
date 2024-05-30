@@ -2,6 +2,7 @@ import 'package:bortube_frontend/objects/user.dart';
 import 'package:bortube_frontend/screens/login_screen.dart';
 import 'package:bortube_frontend/screens/register_screen.dart';
 import 'package:bortube_frontend/services/user_service.dart';
+import 'package:bortube_frontend/widgets/user/check_box_form_field_with_error_message.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -27,6 +28,8 @@ class _UserInfoFormState extends State<UserInfoForm> {
   final _formKey = GlobalKey<FormState>();
 
   bool _hasChanges = false;
+  bool _agree = false;
+  String _agreeError = '';
 
   Future<void> updateUser() async {
     if (_formKey.currentState!.validate()) {
@@ -67,7 +70,7 @@ class _UserInfoFormState extends State<UserInfoForm> {
   }
 
   Future<void> createUser() async {
-    if (_formKey.currentState!.validate()) {
+    if (_formKey.currentState!.validate() && _agree) {
       // Save changes logic
       bool success = await createUserBackend(_emailController.text,
           _passwordController.text, _displayNameController.text);
@@ -186,6 +189,31 @@ class _UserInfoFormState extends State<UserInfoForm> {
                   : null,
               obscureText: true,
             ),
+            widget.shouldCreate
+                ? Padding(
+                    padding: const EdgeInsets.only(left: 23),
+                    child: CheckBoxFormFieldWithErrorMessage(
+                        labelText: "I accept",
+                        isChecked: _agree,
+                        onChanged: (bool? value) {
+                          setState(() {
+                            _agree = value!;
+                            if (_agree) {
+                              _agreeError = '';
+                            } else {
+                              _agreeError = 'You need to agree.';
+                            }
+                          });
+                        },
+                        validator: (value) {
+                          if (!_agree) {
+                            _agreeError = 'You need to agree.';
+                          }
+                          return null;
+                        },
+                        error: "You need to agree."),
+                  )
+                : SizedBox.shrink(),
             SizedBox(height: 16.0),
             if (_hasChanges)
               Row(
