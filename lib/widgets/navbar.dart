@@ -1,4 +1,5 @@
 import 'package:bortube_frontend/objects/user.dart';
+import 'package:bortube_frontend/screens/privacy_policy.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -24,6 +25,7 @@ class NavBar extends StatelessWidget {
           ),
         ),
         actions: [
+          const PrivacyPolicy(),
           Padding(
             padding: const EdgeInsets.only(right: 10),
             child: ElevatedButton.icon(
