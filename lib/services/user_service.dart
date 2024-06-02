@@ -130,6 +130,24 @@ Future<bool> updateUserBackend(
   }
 }
 
+Future<bool> deleteUserBackend(String userId, BuildContext context) async {
+  final headers = {
+    HttpHeaders.acceptHeader: 'application/json',
+  };
+  final response = await globalBrowserClient
+      .delete(Uri.parse("${baseUrl}users/$userId"), headers: headers);
+
+  if (response.statusCode == 204) {
+    return true;
+  } else if (response.statusCode == 401) {
+    await userShouldLogin(context);
+    throw Exception('User not logged in.');
+  } else {
+    throw Exception(
+        'Failed to retrieve user information. Status code: ${response.statusCode}');
+  }
+}
+
 /// Logs out the user from the backend server.
 ///
 /// Sends a POST request to the backend server to log out the user.

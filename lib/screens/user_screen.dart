@@ -20,6 +20,7 @@ class UserScreen extends StatefulWidget {
 
 class _UserScreenState extends State<UserScreen> {
   late Future<User?> user;
+  bool deleteLoading = false;
 
   @override
   void initState() {
@@ -42,7 +43,7 @@ class _UserScreenState extends State<UserScreen> {
     super.dispose();
   }
 
-  Future<void> logoutUser() async {
+  Future<void> logoutUser(bool dontShowScaffoldMessenger) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.remove("loggedInUser");
 
@@ -51,12 +52,14 @@ class _UserScreenState extends State<UserScreen> {
 
     await logoutUserBackend();
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('You have been logged out.'),
-        backgroundColor: Colors.green,
-      ),
-    );
+    if (!dontShowScaffoldMessenger) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('You have been logged out.'),
+          backgroundColor: Colors.green,
+        ),
+      );
+    }
     context.go('/');
   }
 
@@ -113,9 +116,88 @@ class _UserScreenState extends State<UserScreen> {
                             backgroundColor:
                                 MaterialStateProperty.all<Color>(Colors.orange),
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: const Text("Delete account"),
+                                    content: const Text(
+                                        "Are you sure you want to delete your account? Your data will be deleted forever."),
+                                    actions: [
+                                      TextButton(
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: const Text("Cancel")),
+                                      ElevatedButton.icon(
+                                        label: const Text("Delete account"),
+                                        icon: deleteLoading
+                                            ? Container(
+                                                width: 24,
+                                                height: 24,
+                                                padding:
+                                                    const EdgeInsets.all(2.0),
+                                                child:
+                                                    const CircularProgressIndicator(
+                                                  color: Colors.white,
+                                                  strokeWidth: 3,
+                                                ),
+                                              )
+                                            : const Icon(
+                                                Icons.delete_forever_rounded),
+                                        onPressed: deleteLoading
+                                            ? null
+                                            : () async {
+                                                setState(() {
+                                                  deleteLoading = true;
+                                                });
+                                                bool deleted =
+                                                    await deleteUserBackend(
+                                                            snapshot.data!.id,
+                                                            context)
+                                                        .catchError((e) {
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(
+                                                    const SnackBar(
+                                                      content: Text(
+                                                          'Failed to delete account.'),
+                                                      backgroundColor:
+                                                          Colors.red,
+                                                    ),
+                                                  );
+                                                  return false;
+                                                });
+                                                if (!deleted) {
+                                                  setState(() {
+                                                    deleteLoading = false;
+                                                  });
+                                                  return;
+                                                }
+                                                Navigator.of(context).pop();
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  const SnackBar(
+                                                    content: Text(
+                                                        'Account deleted.'),
+                                                    backgroundColor:
+                                                        Colors.green,
+                                                  ),
+                                                );
+                                                setState(() {
+                                                  deleteLoading = false;
+                                                });
+                                                logoutUser(true);
+                                              },
+                                      )
+                                    ],
+                                  );
+                                });
+                          },
                           icon: const Icon(Icons.warning_rounded),
-                          label: const Text("Delete account"),
+                          label: const Text(
+                            "Delete account",
+                          ),
                         ),
                         SizedBox(width: 10),
                         ElevatedButton.icon(
@@ -125,7 +207,9 @@ class _UserScreenState extends State<UserScreen> {
                             backgroundColor:
                                 MaterialStateProperty.all<Color>(Colors.red),
                           ),
-                          onPressed: logoutUser,
+                          onPressed: () {
+                            logoutUser(false);
+                          },
                           icon: const Icon(Icons.logout_rounded),
                           label: const Text("Logout"),
                         ),
