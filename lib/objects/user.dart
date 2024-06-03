@@ -5,8 +5,9 @@ class User {
   String id;
   String email;
   String displayName;
+  DateTime? permissionGrantedDate;
 
-  User(this.id, this.email, this.displayName);
+  User(this.id, this.email, this.displayName, {this.permissionGrantedDate});
 
   factory User.fromJson(dynamic json) {
     print("Decoding: $json");
@@ -16,6 +17,9 @@ class User {
         json['id'] as String,
         json['email'] as String,
         json['displayName'] as String,
+        permissionGrantedDate: json['permissionGrantedDate'] != null
+            ? DateTime.parse(json['permissionGrantedDate'] as String)
+            : null,
       );
     } else if (json is List<dynamic>) {
       // Handle an array of video objects

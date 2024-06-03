@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:bortube_frontend/objects/user.dart';
 import 'package:bortube_frontend/services/user_service.dart';
 import 'package:bortube_frontend/services/video_service.dart';
@@ -41,6 +43,24 @@ class _UserScreenState extends State<UserScreen> {
   @override
   void dispose() {
     super.dispose();
+  }
+
+  Future<void> exportUserData() async {
+    if (widget.userId == null) {
+      return;
+    }
+    var userObj = await getUserBackend(widget.userId!, context);
+    print(userObj.permissionGrantedDate);
+    // Make CSV document from userObj and let the user save it:
+    var csv = "id,email,displayName,permissionGrantedDate\n";
+    csv +=
+        "${userObj.id},${userObj.email},${userObj.displayName},${userObj.permissionGrantedDate}\n";
+    var blob = Blob([csv]);
+    var url = Url.createObjectUrlFromBlob(blob);
+    AnchorElement(href: url)
+      ..setAttribute("download", "BorTubeUserDataTakeOut.csv")
+      ..click();
+    Url.revokeObjectUrl(url);
   }
 
   Future<void> logoutUser(bool dontShowScaffoldMessenger) async {
@@ -101,13 +121,9 @@ class _UserScreenState extends State<UserScreen> {
                         ),
                         const SizedBox(width: 10),
                         ElevatedButton.icon(
-                            onPressed: () {},
-                            icon: const Icon(Icons.movie_rounded),
-                            label: const Text("My videos"),
-                            style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all<Color>(
-                                  Colors.white),
-                            )),
+                            onPressed: exportUserData,
+                            icon: const Icon(Icons.download_rounded),
+                            label: const Text("Export my data (csv)")),
                         const SizedBox(width: 10),
                         ElevatedButton.icon(
                           style: ButtonStyle(
