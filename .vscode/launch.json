@@ -1,0 +1,25 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "BorTube-frontend",
+            "request": "launch",
+            "type": "dart",
+            "args": ["--web-port", "8080"] // Add this line to specify the port
+        },
+        {
+            "name": "BorTube-frontend (profile mode)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile",
+            "args": ["--web-port", "8080"] // Add this line to specify the port
+        },
+        {
+            "name": "BorTube-frontend (release mode)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release",
+            "args": ["--web-port", "8080"] // Add this line to specify the port
+        }
+    ]
+}
