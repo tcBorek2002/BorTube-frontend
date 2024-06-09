@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:http/browser_client.dart';
 import 'package:http/http.dart' as http;
 
-const baseUrl = "http://localhost:8000/";
+const baseUrl = "/api/";
 
 /// Logs in the user to the backend server.
 ///

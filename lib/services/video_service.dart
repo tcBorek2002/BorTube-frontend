@@ -15,7 +15,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:video_player/video_player.dart';
 
-const videosURL = "http://localhost:8000/videos";
+const videosURL = "/api/videos";
 
 Future<void> userShouldLogin(BuildContext context) async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
