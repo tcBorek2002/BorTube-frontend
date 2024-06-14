@@ -7,6 +7,7 @@ import 'package:bortube_frontend/screens/user_screen.dart';
 import 'package:bortube_frontend/screens/video_screen.dart';
 import 'package:bortube_frontend/widgets/navbar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:http/browser_client.dart';
@@ -23,6 +24,7 @@ void main() {
         return userProvider;
       },
       child: MyApp()));
+  SemanticsBinding.instance.ensureSemantics();
 }
 
 class MyApp extends StatefulWidget {
