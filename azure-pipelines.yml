@@ -31,7 +31,7 @@ stages:
         steps:
           - script: npm install cypress --save-dev
             displayName: "Install packages"
-          - script: npm cypress run
+          - script: npx cypress run
             displayName: "Run Tests and Generate Coverage"
 
   - stage: Verify
