@@ -29,7 +29,7 @@ stages:
       - job: Run_tests
         displayName: Run tests
         steps:
-          - script: npm install
+          - script: npm install cypress --save-dev
             displayName: "Install packages"
           - script: npm cypress run
             displayName: "Run Tests and Generate Coverage"
