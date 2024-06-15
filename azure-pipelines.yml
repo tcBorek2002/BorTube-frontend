@@ -22,6 +22,18 @@ variables:
   vmImageName: "ubuntu-latest"
 
 stages:
+  # TESTING: NPX CYPRESS RUN
+  - stage: Test
+    displayName: Test code
+    jobs:
+      - job: Run_tests
+        displayName: Run tests
+        steps:
+          - script: npm install
+            displayName: "Install packages"
+          - script: npm cypress run
+            displayName: "Run Tests and Generate Coverage"
+
   - stage: Verify
     displayName: Verify code
     jobs:
